@@ -697,7 +697,7 @@
       <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
       <div class="filter-sep"></div>
       <button class="filter-btn" onclick="setFilter('Target', this)">Target</button>
-      <button class="filter-btn" onclick="setFilter('Outreach', this)">Outreach</button>
+      <button class="filter-btn" onclick="setFilter('Outreach Sent', this)">Outreach</button>
       <button class="filter-btn" onclick="setFilter('Networking', this)">Networking</button>
       <button class="filter-btn" onclick="setFilter('In Process', this)">In Process</button>
       <button class="filter-btn" onclick="setFilter('Rejected', this)">Rejected</button>
@@ -949,7 +949,7 @@ function setFilter(f, btn) {
   else {
     activeFilter = f;
     document.querySelectorAll('.filters .filter-btn').forEach(b => {
-      if (['Target','Outreach','Networking','In Process','Rejected'].includes(b.textContent)) b.classList.remove('active');
+      if (['Target','Outreach Sent','Networking','In Process','Rejected'].includes(b.textContent)) b.classList.remove('active');
       if (b.textContent === 'All') b.classList.remove('active');
     });
     btn.classList.add('active');
