@@ -7,48 +7,31 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f8f7f4;
-    --surface: #ffffff;
-    --surface2: #f2f0ec;
-    --border: #e2ddd8;
-    --accent: #9a6f2e;
-    --text: #1a1917;
-    --text-muted: #6b6760;
-    --text-dim: #a09d99;
-    --green: #2d7a57;
-    --yellow: #b8860b;
-    --red: #b55a44;
-    --blue: #3a8a78;
-    --purple: #6b5fa0;
-    --hh: #4a7fa5;
+    --bg: #f8f7f4; --surface: #ffffff; --surface2: #f2f0ec; --border: #e2ddd8;
+    --accent: #9a6f2e; --text: #1a1917; --text-muted: #6b6760; --text-dim: #a09d99;
+    --green: #2d7a57; --yellow: #b8860b; --red: #b55a44; --blue: #3a8a78;
+    --purple: #6b5fa0; --hh: #4a7fa5;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; min-height: 100vh; }
-
   .header { border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--bg); z-index: 100; }
-  .header-left { display: flex; align-items: baseline; gap: 16px; }
   .logo { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--accent); letter-spacing: -0.3px; }
   .logo span { color: var(--text-muted); font-size: 13px; font-family: 'DM Mono', monospace; font-weight: 400; }
   .header-stats { display: flex; gap: 20px; align-items: center; }
   .stat-pill { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; }
   .stat-pill strong { color: var(--text); font-size: 15px; font-weight: 500; margin-right: 4px; }
   .stat-pill.hh-pill strong { color: var(--hh); }
-
   .tabs { display: flex; border-bottom: 1px solid var(--border); padding: 0 32px; background: var(--bg); }
   .tab { padding: 12px 20px; font-size: 12px; font-family: 'DM Mono', monospace; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; user-select: none; }
   .tab:hover { color: var(--text-muted); }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
   .main { padding: 28px 32px; max-width: 1500px; margin: 0 auto; }
-  .view { display: none; }
-  .view.active { display: block; }
-
+  .view { display: none; } .view.active { display: block; }
   .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 22px; }
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
   .stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
   .stat-value { font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--text); line-height: 1; }
   .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
-
   .filters { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; align-items: center; }
   .filter-btn { padding: 5px 13px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-size: 11px; font-family: 'DM Mono', monospace; cursor: pointer; transition: all 0.15s; }
   .filter-btn:hover { border-color: var(--text-dim); color: var(--text); }
@@ -58,16 +41,13 @@
   .search-input { margin-left: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 5px 12px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; width: 210px; outline: none; }
   .search-input:focus { border-color: var(--accent); }
   .search-input::placeholder { color: var(--text-dim); }
-
   .geo-section { margin-bottom: 28px; }
   .geo-section-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 10px; padding-bottom: 7px; border-bottom: 2px solid var(--border); }
   .geo-section-title { font-family: 'DM Serif Display', serif; font-size: 17px; color: var(--text); }
   .geo-section-meta { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); letter-spacing: 0.5px; margin-left: auto; }
-
   .subsection-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-dim); display: flex; align-items: center; gap: 8px; margin-bottom: 6px; margin-top: 10px; }
   .subsection-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
   .subsection-label.hh { color: var(--hh); }
-
   .table-wrapper { border: 1px solid var(--border); border-radius: 7px; overflow: hidden; margin-bottom: 4px; }
   table { width: 100%; border-collapse: collapse; }
   thead { background: var(--surface); }
@@ -81,47 +61,33 @@
   .firm-name { font-weight: 500; color: var(--text); }
   .firm-name.hh-name { color: var(--hh); }
   .firm-sub { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; margin-top: 1px; }
-
   .badge { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500; letter-spacing: 0.3px; white-space: nowrap; }
   .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .badge-target { background: rgba(154,142,196,0.12); color: var(--purple); }
-  .badge-target::before { background: var(--purple); }
-  .badge-outreach { background: rgba(200,169,110,0.12); color: var(--yellow); }
-  .badge-outreach::before { background: var(--yellow); }
-  .badge-networking { background: rgba(126,184,164,0.12); color: var(--blue); }
-  .badge-networking::before { background: var(--blue); }
-  .badge-process { background: rgba(90,158,124,0.12); color: var(--green); }
-  .badge-process::before { background: var(--green); }
-  .badge-rejected { background: rgba(196,126,107,0.12); color: var(--red); }
-  .badge-rejected::before { background: var(--red); }
-  .badge-offer { background: rgba(90,158,124,0.2); color: #1a7a47; }
-  .badge-offer::before { background: #2d7a57; }
-  .badge-registered { background: rgba(74,127,165,0.12); color: var(--hh); }
-  .badge-registered::before { background: var(--hh); }
-
+  .badge-target { background: rgba(154,142,196,0.12); color: var(--purple); } .badge-target::before { background: var(--purple); }
+  .badge-outreach { background: rgba(200,169,110,0.12); color: var(--yellow); } .badge-outreach::before { background: var(--yellow); }
+  .badge-networking { background: rgba(126,184,164,0.12); color: var(--blue); } .badge-networking::before { background: var(--blue); }
+  .badge-process { background: rgba(90,158,124,0.12); color: var(--green); } .badge-process::before { background: var(--green); }
+  .badge-rejected { background: rgba(196,126,107,0.12); color: var(--red); } .badge-rejected::before { background: var(--red); }
+  .badge-offer { background: rgba(90,158,124,0.2); color: #1a7a47; } .badge-offer::before { background: #2d7a57; }
+  .badge-registered { background: rgba(74,127,165,0.12); color: var(--hh); } .badge-registered::before { background: var(--hh); }
   .geo-tag { display: inline-block; padding: 2px 7px; border-radius: 3px; font-size: 10px; font-family: 'DM Mono', monospace; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
   .geo-london { border-color: #7eb8a466; color: var(--blue); background: rgba(126,184,164,0.06); }
   .geo-abudhabi { border-color: #c8a96e66; color: var(--yellow); background: rgba(200,169,110,0.06); }
   .geo-madrid { border-color: #c47e6b66; color: var(--red); background: rgba(196,126,107,0.06); }
   .geo-us { border-color: #9b8ec466; color: var(--purple); background: rgba(154,142,196,0.06); }
-
   .priority { font-family: 'DM Mono', monospace; font-size: 12px; }
   .p1 { color: #e8856a; } .p2 { color: var(--yellow); } .p3 { color: var(--text-muted); }
   .next-action { font-size: 12px; color: var(--text-muted); max-width: 240px; }
-  .next-action.overdue { color: var(--red); }
-  .next-action.soon { color: var(--yellow); }
+  .next-action.overdue { color: var(--red); } .next-action.soon { color: var(--yellow); }
   .date-cell { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); white-space: nowrap; }
-  .date-cell.overdue { color: var(--red); }
-  .date-cell.soon { color: var(--yellow); }
+  .date-cell.overdue { color: var(--red); } .date-cell.soon { color: var(--yellow); }
   .contact-cell { font-size: 12px; color: var(--text-muted); }
   .notes-preview { font-size: 11px; color: var(--text-dim); font-style: italic; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .actions-cell { white-space: nowrap; }
   .icon-btn { background: none; border: none; cursor: pointer; color: var(--text-dim); font-size: 14px; padding: 3px 5px; border-radius: 3px; transition: color 0.1s, background 0.1s; }
   .icon-btn:hover { color: var(--text); background: var(--surface2); }
-
   .btn-add { display: flex; align-items: center; gap: 7px; padding: 7px 15px; background: var(--accent); color: #fff; border: none; border-radius: 5px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; }
   .btn-add:hover { opacity: 0.88; }
-
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 26px; width: 620px; max-height: 90vh; overflow-y: auto; position: relative; }
@@ -140,12 +106,10 @@
   .btn-delete { padding: 7px 15px; background: transparent; border: 1px solid var(--red); border-radius: 5px; color: var(--red); font-family: 'DM Sans', sans-serif; font-size: 13px; cursor: pointer; margin-right: auto; }
   .modal-close { position: absolute; top: 14px; right: 16px; background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; line-height: 1; }
   .modal-close:hover { color: var(--text); }
-
   .type-toggle { display: flex; border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
   .type-btn { flex: 1; padding: 8px; border: none; background: transparent; font-family: 'DM Mono', monospace; font-size: 12px; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
   .type-btn.active-fund { background: rgba(154,111,46,0.1); color: var(--accent); font-weight: 600; }
   .type-btn.active-hh { background: rgba(74,127,165,0.1); color: var(--hh); font-weight: 600; }
-
   .pipeline { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; overflow-x: auto; }
   .pipeline-col { min-width: 175px; }
   .pipeline-header { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); padding: 8px 0 10px; border-bottom: 2px solid var(--border); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
@@ -156,35 +120,25 @@
   .pc-geo { font-size: 10px; margin-bottom: 5px; }
   .pc-action { font-size: 11px; color: var(--text-muted); font-style: italic; }
   .pc-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 4px; }
-
   .calendar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
   .week-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 13px; }
   .week-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.8px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 9px; }
   .cal-item { display: flex; gap: 9px; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
   .cal-item:last-child { border-bottom: none; }
   .cal-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
-  .cal-dot.fund { background: var(--accent); }
-  .cal-dot.hh { background: var(--hh); }
+  .cal-dot.fund { background: var(--accent); } .cal-dot.hh { background: var(--hh); }
   .cal-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); min-width: 30px; margin-top: 1px; }
   .cal-firm { font-weight: 500; color: var(--text); font-size: 12px; }
   .cal-firm.hh { color: var(--hh); }
   .cal-text { font-size: 11px; color: var(--text-muted); }
   .empty { text-align: center; padding: 28px 20px; color: var(--text-dim); font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.5px; }
-
-  @media (max-width: 900px) {
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .main { padding: 16px; }
-    .header { padding: 14px 16px; }
-    .tabs { padding: 0 16px; }
-  }
+  @media (max-width: 900px) { .stats-row { grid-template-columns: repeat(2, 1fr); } .main { padding: 16px; } .header { padding: 14px 16px; } .tabs { padding: 0 16px; } }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-left">
-    <div class="logo">PE Recruiting <span>// Wharton MBA 2027</span></div>
-  </div>
+  <div class="logo">PE Recruiting <span>// Wharton MBA 2027</span></div>
   <div class="header-stats">
     <div class="stat-pill"><strong id="h-funds">0</strong>funds</div>
     <div class="stat-pill hh-pill"><strong id="h-hh">0</strong>headhunters</div>
@@ -203,33 +157,12 @@
 <div class="main">
   <div class="view active" id="view-tracker">
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">Funds Tracked</div>
-        <div class="stat-value" id="s-total">0</div>
-        <div class="stat-sub" id="s-geo-breakdown">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Headhunters</div>
-        <div class="stat-value" id="s-hh" style="color:var(--hh)">0</div>
-        <div class="stat-sub" id="s-hh-sub">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">In Process</div>
-        <div class="stat-value" id="s-process" style="color:var(--green)">0</div>
-        <div class="stat-sub">interviews / final rounds</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Networking</div>
-        <div class="stat-value" id="s-network" style="color:var(--blue)">0</div>
-        <div class="stat-sub">active conversations</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Overdue</div>
-        <div class="stat-value" id="s-overdue" style="color:var(--red)">0</div>
-        <div class="stat-sub">need follow-up</div>
-      </div>
+      <div class="stat-card"><div class="stat-label">Funds Tracked</div><div class="stat-value" id="s-total">0</div><div class="stat-sub" id="s-geo-breakdown">—</div></div>
+      <div class="stat-card"><div class="stat-label">Headhunters</div><div class="stat-value" id="s-hh" style="color:var(--hh)">0</div><div class="stat-sub" id="s-hh-sub">—</div></div>
+      <div class="stat-card"><div class="stat-label">In Process</div><div class="stat-value" id="s-process" style="color:var(--green)">0</div><div class="stat-sub">interviews / final rounds</div></div>
+      <div class="stat-card"><div class="stat-label">Networking</div><div class="stat-value" id="s-network" style="color:var(--blue)">0</div><div class="stat-sub">active conversations</div></div>
+      <div class="stat-card"><div class="stat-label">Overdue</div><div class="stat-value" id="s-overdue" style="color:var(--red)">0</div><div class="stat-sub">need follow-up</div></div>
     </div>
-
     <div class="filters">
       <button class="filter-btn active" id="fb-all" onclick="setTypeFilter('all',this)">All</button>
       <button class="filter-btn" id="fb-fund" onclick="setTypeFilter('fund',this)">Funds Only</button>
@@ -247,14 +180,9 @@
       <button class="filter-btn" onclick="setGeoFilter('Madrid',this)">Madrid</button>
       <input class="search-input" type="text" placeholder="Search firms, contacts..." oninput="renderTracker()" id="search-input">
     </div>
-
     <div id="tracker-body"></div>
   </div>
-
-  <div class="view" id="view-pipeline">
-    <div class="pipeline" id="pipeline-board"></div>
-  </div>
-
+  <div class="view" id="view-pipeline"><div class="pipeline" id="pipeline-board"></div></div>
   <div class="view" id="view-calendar">
     <div style="margin-bottom:14px;font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.5px;">UPCOMING ACTIONS — next 8 weeks</div>
     <div class="calendar-grid" id="cal-grid"></div>
@@ -267,87 +195,31 @@
     <button class="modal-close" onclick="closeModal()">×</button>
     <div class="modal-title" id="modal-title">Add Entry</div>
     <div class="form-grid">
-      <div class="form-group full">
-        <label>Type</label>
+      <div class="form-group full"><label>Type</label>
         <div class="type-toggle">
           <button class="type-btn active-fund" id="tbtn-fund" onclick="setModalType('fund')">Fund / Firm</button>
           <button class="type-btn" id="tbtn-hh" onclick="setModalType('headhunter')">Headhunter</button>
         </div>
       </div>
-      <div class="form-group full">
-        <label>Name *</label>
-        <input type="text" id="f-firm" placeholder="e.g. Cinven, SG Partners…">
+      <div class="form-group full"><label>Name *</label><input type="text" id="f-firm" placeholder="e.g. Cinven, SG Partners…"></div>
+      <div class="form-group"><label>Geography *</label>
+        <select id="f-geo"><option value="">Select…</option><option value="US">US</option><option value="London">London</option><option value="Abu Dhabi">Abu Dhabi</option><option value="Madrid">Madrid</option><option value="Multi">Multi-geo</option></select>
       </div>
-      <div class="form-group">
-        <label>Geography *</label>
-        <select id="f-geo">
-          <option value="">Select…</option>
-          <option value="US">US</option>
-          <option value="London">London</option>
-          <option value="Abu Dhabi">Abu Dhabi</option>
-          <option value="Madrid">Madrid</option>
-          <option value="Multi">Multi-geo</option>
-        </select>
+      <div class="form-group"><label>Status *</label>
+        <select id="f-status"><option value="Target">Target</option><option value="Outreach Sent">Outreach Sent</option><option value="Networking">Networking</option><option value="In Process">In Process</option><option value="Registered">Registered</option><option value="Rejected">Rejected</option><option value="Offer">Offer</option></select>
       </div>
-      <div class="form-group">
-        <label>Status *</label>
-        <select id="f-status">
-          <option value="Target">Target</option>
-          <option value="Outreach Sent">Outreach Sent</option>
-          <option value="Networking">Networking</option>
-          <option value="In Process">In Process</option>
-          <option value="Registered">Registered</option>
-          <option value="Rejected">Rejected</option>
-          <option value="Offer">Offer</option>
-        </select>
+      <div class="form-group fund-only"><label>Strategy</label>
+        <select id="f-strategy"><option value="">Select…</option><option value="Buyout">Buyout</option><option value="Growth Equity">Growth Equity</option><option value="Infrastructure">Infrastructure</option><option value="Venture">Venture</option><option value="Credit">Credit</option><option value="Sovereign">Sovereign / SWF</option><option value="Distressed">Distressed</option><option value="Real Estate">Real Estate</option><option value="Generalist">Generalist</option></select>
       </div>
-      <div class="form-group fund-only">
-        <label>Strategy</label>
-        <select id="f-strategy">
-          <option value="">Select…</option>
-          <option value="Buyout">Buyout</option>
-          <option value="Growth Equity">Growth Equity</option>
-          <option value="Infrastructure">Infrastructure</option>
-          <option value="Venture">Venture</option>
-          <option value="Credit">Credit</option>
-          <option value="Sovereign">Sovereign / SWF</option>
-          <option value="Distressed">Distressed</option>
-          <option value="Real Estate">Real Estate</option>
-          <option value="Generalist">Generalist</option>
-        </select>
+      <div class="form-group fund-only"><label>AUM</label><input type="text" id="f-aum" placeholder="e.g. $20B"></div>
+      <div class="form-group fund-only"><label>Priority</label>
+        <select id="f-priority"><option value="1">P1 — High</option><option value="2">P2 — Medium</option><option value="3">P3 — Low</option></select>
       </div>
-      <div class="form-group fund-only">
-        <label>AUM</label>
-        <input type="text" id="f-aum" placeholder="e.g. $20B">
-      </div>
-      <div class="form-group fund-only">
-        <label>Priority</label>
-        <select id="f-priority">
-          <option value="1">P1 — High</option>
-          <option value="2">P2 — Medium</option>
-          <option value="3">P3 — Low</option>
-        </select>
-      </div>
-      <div class="form-group fund-only">
-        <label>Sourcing HH</label>
-        <input type="text" id="f-headhunter" placeholder="e.g. SG Partners, GoBuyside…">
-      </div>
-      <div class="form-group full">
-        <label>Key Contact</label>
-        <input type="text" id="f-contact" placeholder="Name / Title">
-      </div>
-      <div class="form-group full">
-        <label>Next Action</label>
-        <input type="text" id="f-action" placeholder="e.g. Send intro email, follow up…">
-      </div>
-      <div class="form-group">
-        <label>Next Action Date</label>
-        <input type="date" id="f-date">
-      </div>
-      <div class="form-group full">
-        <label>Notes</label>
-        <textarea id="f-notes" placeholder="Focus, conversations, feedback, key names…"></textarea>
-      </div>
+      <div class="form-group fund-only"><label>Sourcing HH</label><input type="text" id="f-headhunter" placeholder="e.g. SG Partners, GoBuyside…"></div>
+      <div class="form-group full"><label>Key Contact</label><input type="text" id="f-contact" placeholder="Name / Title"></div>
+      <div class="form-group full"><label>Next Action</label><input type="text" id="f-action" placeholder="e.g. Send intro email, follow up…"></div>
+      <div class="form-group"><label>Next Action Date</label><input type="date" id="f-date"></div>
+      <div class="form-group full"><label>Notes</label><textarea id="f-notes" placeholder="Focus, conversations, feedback, key names…"></textarea></div>
     </div>
     <div class="form-actions">
       <button class="btn-delete" id="btn-delete" style="display:none" onclick="deleteFirm()">Delete</button>
@@ -394,77 +266,80 @@ function hhDate(i) {
   return d.toISOString().split('T')[0];
 }
 
-function getDefaultData() {
-  const funds = [
-    { firm:'Mubadala', geo:'US', strategy:'Sovereign', aum:'', status:'In Process', priority:'1', contact:'Reem Abdulla Al Shamsi', action:'Follow interview schedule', nextDate:'', headhunter:'Direct', notes:'PE team, New York. Active process ongoing.' },
-    { firm:'Bridgepoint', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Hector Pérez', action:'Network Wharton', nextDate:'2026-04-07', headhunter:'', notes:'' },
-    { firm:'KKR', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Iñaki Cobos', action:'Network Iñaki Cobos (Spanish MBA Conference)', nextDate:'2026-04-17', headhunter:'', notes:'' },
-    { firm:'Permira', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Lucy Walker', action:'Follow-up proceso Madrid', nextDate:'2026-09-01', headhunter:'', notes:'' },
-    { firm:'Cinven', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Escribir Álvaro Fraguas', nextDate:'2026-05-12', headhunter:'', notes:'Escribir amigo Álvaro Fraguas.' },
-    { firm:'EQT', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Buscar Wharton alumni en EQT London', nextDate:'2026-05-17', headhunter:'', notes:'' },
-    { firm:'CVC', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Javier Pasquín', action:'Follow-up on processes', nextDate:'2026-05-19', headhunter:'', notes:'' },
-    { firm:'EQT', geo:'US', strategy:'Infrastructure', aum:'', status:'Target', priority:'1', contact:'Bea Garí', action:'Escribir en junio', nextDate:'2026-06-08', headhunter:'', notes:'Escribir a Bea Garí y preguntar por tie...' },
-    { firm:'HIG (Miami)', geo:'US', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Samantha Schiff', action:'Follow-up for coffee chat', nextDate:'2026-06-15', headhunter:'', notes:'' },
-    { firm:'L Catterton (Miami)', geo:'US', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look and network', nextDate:'2026-06-15', headhunter:'', notes:'' },
-    { firm:'Ardian', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Antonio Costa?', action:'Follow-up con Antonio post-verano', nextDate:'2026-09-06', headhunter:'', notes:'' },
-    { firm:'Warburg Pincus', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Ricardo de Serdio', action:'Escribir en septiembre', nextDate:'2026-09-06', headhunter:'', notes:'' },
-    { firm:'Advent', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Ramón Arocena', action:'Escribir en septiembre', nextDate:'2026-09-06', headhunter:'', notes:'' },
-    { firm:'KKR', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Laali Vadlamani', action:'Follow-up in August', nextDate:'2026-08-10', headhunter:'', notes:'Follow-up and ask for any active processes' },
-    { firm:'General Atlantic', geo:'US', strategy:'Growth Equity', aum:'', status:'Target', priority:'2', contact:'', action:'Reach-out to Wharton alumni', nextDate:'2026-05-11', headhunter:'', notes:'' },
-    { firm:'Apollo', geo:'US', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'[Look for visit]', action:'Follow-up and ask for HH referal', nextDate:'2026-05-10', headhunter:'', notes:'' },
-    { firm:'Apax', geo:'US', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'[Look for visit]', action:'Follow-up with HH referal', nextDate:'2026-05-10', headhunter:'', notes:'' },
-    { firm:'MGX', geo:'Abu Dhabi', strategy:'Sovereign', aum:'', status:'Target', priority:'1', contact:'PER', action:'Reach-out to PER and actively ask', nextDate:'2026-04-09', headhunter:'', notes:'' },
-    { firm:'ADIA', geo:'Abu Dhabi', strategy:'Sovereign', aum:'', status:'Target', priority:'1', contact:'PER', action:'Reach-out to PER and actively ask', nextDate:'2026-04-09', headhunter:'', notes:'' },
-    { firm:'Mubadala', geo:'Abu Dhabi', strategy:'Sovereign', aum:'', status:'Target', priority:'1', contact:'PER', action:'Reach-out to PER and actively ask', nextDate:'2026-04-09', headhunter:'', notes:'' },
-    { firm:'Bridgepoint', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look for Wharton alumni and network', nextDate:'2026-05-10', headhunter:'', notes:'' },
-    { firm:'Carlyle', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Filip Jaksik', action:'Cold reach-out', nextDate:'2026-08-03', headhunter:'', notes:'' },
-    { firm:'CVC', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Alonso de las Fuentes', action:'Reach-out ask for HR intro', nextDate:'2026-06-08', headhunter:'', notes:'' },
-    { firm:'Partners Group', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Anselmo García', action:'Ask for HR intro', nextDate:'2026-06-08', headhunter:'', notes:'' },
-    { firm:'General Atlantic', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look for Wharton alumni', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'Permira', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Pallete', action:'Active recruiting', nextDate:'2026-09-08', headhunter:'', notes:'' },
-    { firm:'Advent', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Ask for contact in HR (Juan?) + Spanish', nextDate:'2026-09-08', headhunter:'', notes:'' },
-    { firm:'Blackstone', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Lola Basabe', action:'Reach-out to understand hiring needs', nextDate:'2026-06-10', headhunter:'', notes:'' },
-    { firm:'Apollo', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look for Wharton/MBA alumni', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'PAI Partners', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look for Wharton alumni', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'Bain Capital', geo:'London', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'Look for Wharton alumni', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'EQT', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Carlos Santana', action:'Follow-up', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'Carlyle', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Isabel Jurado', action:'Escribir para proceso', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'PAI Partners', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'Raul Cánovas', action:'Escribir', nextDate:'2026-09-03', headhunter:'', notes:'' },
-    { firm:'ALEJANDRO MEJÍAS', geo:'Madrid', strategy:'Buyout', aum:'', status:'Target', priority:'1', contact:'', action:'ESCRIBIR MEJÍAS SENTADAS PE ESPAÑA', nextDate:'2026-04-09', headhunter:'', notes:'' },
-    { firm:'Emerging Globe', geo:'Multi', strategy:'', aum:'', status:'Target', priority:'1', contact:'resumes@emergingglobe.com', action:'Escribir para call introductoria', nextDate:'2026-04-08', headhunter:'', notes:'https://www.emergingglobe.com/meet-the-relationship-recruiters' },
-  ].map(f => ({ id: uid(), type: 'fund', created: Date.now(), ...f }));
+// ── SEED DATA: all 36 funds from your live dashboard ─────────────────────────
+const SEED_FUNDS = [
+  {id:'mno18fzd8u2ijzn0pde',type:'fund',firm:'Mubadala',geo:'US',strategy:'Sovereign',aum:'',status:'In Process',priority:'1',contact:'Reem Abdulla Al Shamsi',action:'Follow interview schedule',nextDate:'',headhunter:'Direct',notes:'PE team, New York. Active process ongoing.',created:1775530865641},
+  {id:'mno18fzd308tyl7wtqw',type:'fund',firm:'Bridgepoint',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Hector Pérez',action:'Network Wharton',nextDate:'2026-04-07',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdi9it58ln79',type:'fund',firm:'KKR',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Iñaki Cobos',action:'Network Iñaki Cobos (Spanish MBA Conference)',nextDate:'2026-04-17',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdooyzknewjr',type:'fund',firm:'Permira',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Lucy Walker',action:'Follow-up proceso Madrid',nextDate:'2026-09-01',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdzwuzyvuojeh',type:'fund',firm:'Cinven',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Escribir Álvaro Fraguas',nextDate:'2026-05-12',headhunter:'',notes:'Escribir amigo Álvaro Fraguas.',created:1775530865641},
+  {id:'mno18fzdcgyt28kyra',type:'fund',firm:'EQT',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Buscar Wharton alumni en EQT London',nextDate:'2026-05-17',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzd5eqi7ufko26',type:'fund',firm:'CVC',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Javier Pasquín',action:'Follow-up on processes',nextDate:'2026-05-19',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdbase64a',type:'fund',firm:'EQT',geo:'US',strategy:'Infrastructure',aum:'',status:'Target',priority:'1',contact:'Bea Garí',action:'Escribir en junio',nextDate:'2026-06-08',headhunter:'',notes:'Escribir a Bea Garí y preguntar por tie...',created:1775530865641},
+  {id:'mno18fzdpgmvwfoy93',type:'fund',firm:'HIG (Miami)',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Samantha Schiff',action:'Follow-up for coffee chat',nextDate:'2026-06-15',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdrujftv22lzm',type:'fund',firm:'L Catterton (Miami)',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look and network',nextDate:'2026-06-15',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdkcaopwe3je',type:'fund',firm:'Ardian',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Antonio Costa?',action:'Follow-up con Antonio post-verano',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdncmoeetv2qd',type:'fund',firm:'Warburg Pincus',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Ricardo de Serdio',action:'Escribir en septiembre',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno18fzdeidxiv7zqjl',type:'fund',firm:'Advent',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Ramón Arocena',action:'Escribir en septiembre',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
+  {id:'mno1g1eyjuxoz5936bc',type:'fund',firm:'KKR',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Laali Vadlamani',action:'Follow-up in August',nextDate:'2026-08-10',headhunter:'',notes:'Follow-up and ask for any active processes',created:1775531220010},
+  {id:'mno1pmqe6e168lstant',type:'fund',firm:'General Atlantic',geo:'US',strategy:'Growth Equity',aum:'',status:'Target',priority:'2',contact:'',action:'Reach-out to Wharton alumni',nextDate:'2026-05-11',headhunter:'',notes:'',created:1775531667542},
+  {id:'mno1rbkz5msz55wvl9d',type:'fund',firm:'Apollo',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'[Look for visit]',action:'Follow-up and ask for HH referal',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531746403},
+  {id:'mno1s8v5apm1c0hl5eu',type:'fund',firm:'Apax',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'[Look for visit]',action:'Follow-up with HH referal',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531789537},
+  {id:'mno1t7dzuu342rlk9rf',type:'fund',firm:'MGX',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531834279},
+  {id:'mno1tval5un7qgdzzn6',type:'fund',firm:'ADIA',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531865261},
+  {id:'mno1u6ykye8ix4vo5b',type:'fund',firm:'Mubadala',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531880380},
+  {id:'mno1uy3dggf0mbqja3q',type:'fund',firm:'Bridgepoint',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni and network',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531915545},
+  {id:'mno1wguu4ozthwp9nr7',type:'fund',firm:'Carlyle',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Filip Jaksik',action:'Cold reach-out',nextDate:'2026-08-03',headhunter:'',notes:'',created:1775531986518},
+  {id:'mno1xjt6833tnoxjobp',type:'fund',firm:'CVC',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Alonso de las Fuentes',action:'Reach-out ask for HR intro',nextDate:'2026-06-08',headhunter:'',notes:'',created:1775532037002},
+  {id:'mno1yilskxv7goui6x',type:'fund',firm:'Partners Group',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Anselmo García',action:'Ask for HR intro',nextDate:'2026-06-08',headhunter:'',notes:'',created:1775532082096},
+  {id:'mno1zdu1x1zjy9ah118',type:'fund',firm:'General Atlantic',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532122569},
+  {id:'mno20cvigfnyofr92v7',type:'fund',firm:'Permira',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Pallete',action:'Active recruiting',nextDate:'2026-09-08',headhunter:'',notes:'',created:1775532167982},
+  {id:'mno21wj9e02tl4ih1ci',type:'fund',firm:'Advent',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Ask for contact in HR (Juan?) + Spanish',nextDate:'2026-09-08',headhunter:'',notes:'',created:1775532240117},
+  {id:'mno22z496ib3jn3ijdk',type:'fund',firm:'Blackstone',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Lola Basabe',action:'Reach-out to understand hiring needs',nextDate:'2026-06-10',headhunter:'',notes:'',created:1775532290121},
+  {id:'mno23xm8tgy4m3hspx',type:'fund',firm:'Apollo',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton/MBA alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532334832},
+  {id:'mno24kftrg87y2kubh',type:'fund',firm:'PAI Partners',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532364409},
+  {id:'mno25orduzgnx39nn2',type:'fund',firm:'Bain Capital',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532416665},
+  {id:'mno275whqd11qugsbza',type:'fund',firm:'EQT',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Carlos Santana',action:'Follow-up',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532485537},
+  {id:'mno27q7cq0wvn4l02yf',type:'fund',firm:'Carlyle',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Isabel Jurado',action:'Escribir para proceso',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532511848},
+  {id:'mno28rg68bcztywqwaw',type:'fund',firm:'PAI Partners',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Raul Cánovas',action:'Escribir',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532560118},
+  {id:'mno2bdtttohi7u7jd9j',type:'fund',firm:'ALEJANDRO MEJÍAS',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'ESCRIBIR MEJÍAS SENTADAS PE ESPAÑA',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775532682433},
+  {id:'mnoo77b9zalsyrg8ztq',type:'fund',firm:'Emerging Globe (Headhunter)',geo:'Multi',strategy:'',aum:'',status:'Target',priority:'1',contact:'resumes@emergingglobe.com',action:'Escribir para call introductoria',nextDate:'2026-04-08',headhunter:'',notes:'https://www.emergingglobe.com/meet-the-relationship-recruiters',created:1775569438917},
+];
 
-  const usHH = ['Amity Search Partners','CPI','Henkel Search Partners','Opus Advisors','Gold Coast Search Partners','Ratio Advisors','Oxbridge Group','SG Partners','Bellcast Partners','Carter Pierce Recruiting','Dynamics Search Partners','Glocap','SearchOne','GoBuyside','Pinnacle Group','Robin Judson'];
-  const ukHH = ['Blackwood Group','Carpenter Farraday','KEA Consultants','Walker Hamill','Cornell Partnership','Stevenson James','Greenwich Partners','One Search','Selby Jennings','Morgan McKinley','Circle Square'];
-  let idx = 0;
-  const hhs = [
-    ...usHH.map(name => ({ id:uid(), type:'headhunter', firm:name, geo:'US', strategy:'', aum:'', status:'Target', priority:'2', contact:'', action:'Reach out — intro email', nextDate:hhDate(idx++), headhunter:'', notes:'', created:Date.now() })),
-    ...ukHH.map(name => ({ id:uid(), type:'headhunter', firm:name, geo:'London', strategy:'', aum:'', status:'Target', priority:'2', contact:'', action:'Reach out — intro email', nextDate:hhDate(idx++), headhunter:'', notes:'', created:Date.now() })),
+const US_HH = ['Amity Search Partners','CPI','Henkel Search Partners','Opus Advisors','Gold Coast Search Partners','Ratio Advisors','Oxbridge Group','SG Partners','Bellcast Partners','Carter Pierce Recruiting','Dynamics Search Partners','Glocap','SearchOne','GoBuyside','Pinnacle Group','Robin Judson'];
+const UK_HH = ['Blackwood Group','Carpenter Farraday','KEA Consultants','Walker Hamill','Cornell Partnership','Stevenson James','Greenwich Partners','One Search','Selby Jennings','Morgan McKinley','Circle Square'];
+
+function buildSeedHH() {
+  let i = 0;
+  return [
+    ...US_HH.map(name => ({id:uid(),type:'headhunter',firm:name,geo:'US',strategy:'',aum:'',status:'Target',priority:'2',contact:'',action:'Reach out — intro email',nextDate:hhDate(i++),headhunter:'',notes:'',created:Date.now()})),
+    ...UK_HH.map(name => ({id:uid(),type:'headhunter',firm:name,geo:'London',strategy:'',aum:'',status:'Target',priority:'2',contact:'',action:'Reach out — intro email',nextDate:hhDate(i++),headhunter:'',notes:'',created:Date.now()})),
   ];
-  return [...funds, ...hhs];
 }
 
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) { firms = JSON.parse(raw); return; }
-    const old = localStorage.getItem('pe_recruiting_v2');
-    if (old) {
-      firms = JSON.parse(old).map(f => ({ ...f, type: f.type || 'fund' }));
-      const hhOnly = getDefaultData().filter(f => f.type === 'headhunter');
-      firms = [...firms, ...hhOnly];
-      save(); return;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Guard: if stored data has fewer funds than seed, it's stale — reset
+      const storedFunds = parsed.filter(f => f.type !== 'headhunter').length;
+      if (storedFunds >= SEED_FUNDS.length) { firms = parsed; return; }
     }
-    firms = getDefaultData();
-  } catch(e) { firms = getDefaultData(); }
+    // First load or stale data: use hardcoded seed
+    firms = [...SEED_FUNDS, ...buildSeedHH()];
+    save();
+  } catch(e) {
+    firms = [...SEED_FUNDS, ...buildSeedHH()];
+  }
 }
 function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(firms)); }
 
+// ── FILTERS ──────────────────────────────────────────────────────────────────
 function setTypeFilter(type, btn) {
   activeTypeFilter = type;
-  ['fb-all','fb-fund','fb-hh'].forEach(id => { const b = document.getElementById(id); b.className = 'filter-btn'; });
-  if (type === 'headhunter') btn.classList.add('active-hh');
-  else btn.classList.add('active');
+  ['fb-all','fb-fund','fb-hh'].forEach(id => { document.getElementById(id).className = 'filter-btn'; });
+  btn.classList.add(type === 'headhunter' ? 'active-hh' : 'active');
   renderTracker();
 }
 function setStatusFilter(s, btn) {
@@ -500,8 +375,9 @@ function getFiltered() {
   });
 }
 
+// ── RENDER ───────────────────────────────────────────────────────────────────
 const GEO_ORDER = ['US','London','Abu Dhabi','Madrid','Multi'];
-const GEO_LABELS = { US:'United States', London:'London & UK', 'Abu Dhabi':'Abu Dhabi / MENA', Madrid:'Madrid & Spain', Multi:'Multi-Geography' };
+const GEO_LABELS = {US:'United States',London:'London & UK','Abu Dhabi':'Abu Dhabi / MENA',Madrid:'Madrid & Spain',Multi:'Multi-Geography'};
 
 function renderTracker() {
   const data = getFiltered();
@@ -509,10 +385,10 @@ function renderTracker() {
   if (!data.length) { container.innerHTML=`<div class="table-wrapper"><div class="empty">No entries match current filters.</div></div>`; updateStats(); return; }
 
   const byGeo = {};
-  GEO_ORDER.forEach(g => byGeo[g] = { fund:[], headhunter:[] });
+  GEO_ORDER.forEach(g => byGeo[g] = {fund:[],headhunter:[]});
   data.forEach(f => {
-    const g = f.geo || 'Multi';
-    if (!byGeo[g]) byGeo[g] = { fund:[], headhunter:[] };
+    const g = f.geo||'Multi';
+    if (!byGeo[g]) byGeo[g]={fund:[],headhunter:[]};
     byGeo[g][f.type==='headhunter'?'headhunter':'fund'].push(f);
   });
 
@@ -627,6 +503,7 @@ function renderCalendar() {
   document.getElementById('cal-grid').innerHTML=html.join('');
 }
 
+// ── MODAL ────────────────────────────────────────────────────────────────────
 function setModalType(type) {
   modalType=type;
   document.getElementById('tbtn-fund').className='type-btn'+(type==='fund'?' active-fund':'');
