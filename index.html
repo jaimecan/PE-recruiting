@@ -859,43 +859,84 @@ function save() {
 }
 
 function getDefaultData() {
-  // Pre-seeded with Jaime's known targets based on context
   return [
     {
-      id: uid(), firm: 'Mubadala Investment Company', geo: 'Abu Dhabi', strategy: 'Sovereign / SWF',
+      id: uid(), firm: 'Mubadala Investment Company', geo: 'Abu Dhabi', strategy: 'Buyout',
       aum: '$300B+', status: 'In Process', priority: '1',
-      contact: 'VP Talent Partners (active contact)', action: 'Follow interview schedule',
+      contact: 'Reem Abdulla Al Shamsi', action: 'Follow interview schedule',
       nextDate: '', headhunter: 'Direct', notes: 'PE team, New York. Active process ongoing.', created: Date.now()
     },
     {
-      id: uid(), firm: 'Cinven', geo: 'London', strategy: 'Buyout',
-      aum: '~€18B', status: 'Target', priority: '1',
-      contact: '', action: 'Research fund + reach out to alumni',
-      nextDate: '', headhunter: 'PER / Nordbridge', notes: 'European mid-large buyout. Spanish background relevant.', created: Date.now()
+      id: uid(), firm: 'Bridgepoint', geo: 'Madrid', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Hector Pérez', action: 'Network Wharton',
+      nextDate: '2026-04-07', headhunter: '', notes: '', created: Date.now()
     },
     {
-      id: uid(), firm: 'CVC Capital Partners', geo: 'London', strategy: 'Buyout',
-      aum: '~€40B', status: 'Target', priority: '1',
-      contact: '', action: 'Find Wharton alumni at CVC',
-      nextDate: '', headhunter: '', notes: 'Strong presence in Spain (Deoleo, Cortefiel history). Relevant angle.', created: Date.now()
-    },
-    {
-      id: uid(), firm: 'Ardian', geo: 'Madrid', strategy: 'Buyout',
-      aum: '$160B+', status: 'Target', priority: '2',
-      contact: '', action: 'Network via Conferencia MBA España',
-      nextDate: '2026-04-18', headhunter: '', notes: 'Madrid office growing. Spanish speaker advantage.', created: Date.now()
+      id: uid(), firm: 'KKR', geo: 'Madrid', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Roberto García', action: 'Network Iñaki Cobos (Spanish MBA Conference) + Follow-up Laali (and cc\'d) in September',
+      nextDate: '2026-04-17', headhunter: '', notes: '', created: Date.now()
     },
     {
       id: uid(), firm: 'Permira', geo: 'London', strategy: 'Buyout',
-      aum: '$80B+', status: 'Target', priority: '1',
-      contact: '', action: 'Headhunter outreach via Nordbridge',
-      nextDate: '', headhunter: 'Nordbridge', notes: '', created: Date.now()
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Lucy Walker / Pallete', action: 'Pending Lucca',
+      nextDate: '2026-04-21', headhunter: '', notes: '', created: Date.now()
     },
     {
-      id: uid(), firm: 'Point72', geo: 'US', strategy: 'Generalist',
-      aum: '$34B', status: 'Outreach', priority: '2',
-      contact: '', action: 'Follow up on application',
-      nextDate: '', headhunter: 'Direct', notes: 'Wrote essay on Spanish medieval history + path dependency for application.', created: Date.now()
+      id: uid(), firm: 'Cinven', geo: 'London', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: '', action: 'Escribir Álvaro Fraguas',
+      nextDate: '2026-05-12', headhunter: '', notes: 'Escribir amigo Álvaro Fraguas.', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'EQT', geo: 'London', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: '', action: 'Buscar Wharton alumni en EQT London',
+      nextDate: '2026-05-17', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'CVC Capital Partners', geo: 'Madrid', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Javier Pasquín', action: 'Escribir Pasquín',
+      nextDate: '2026-05-19', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'EQT', geo: 'US', strategy: 'Infrastructure',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Bea Garí', action: 'Escribir en junio',
+      nextDate: '2026-06-08', headhunter: '', notes: 'Escribir a Bea Garí y preguntar por tie...', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'HIG (Miami)', geo: 'US', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Samantha Schiff', action: 'Follow-up for coffee chat',
+      nextDate: '2026-06-15', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'L Catterton (Miami)', geo: 'US', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: '', action: 'Look and network',
+      nextDate: '2026-06-15', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Ardian', geo: 'London', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Antonio Costa?', action: 'Follow-up con Antonio post-verano',
+      nextDate: '2026-09-06', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Warburg Pincus', geo: 'London', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Ricardo de Serdio', action: 'Escribir en septiembre',
+      nextDate: '2026-09-06', headhunter: '', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Advent', geo: 'Madrid', strategy: 'Buyout',
+      aum: '', status: 'Target', priority: '1',
+      contact: 'Ramón Arocena', action: 'Escribir en septiembre',
+      nextDate: '2026-09-06', headhunter: '', notes: '', created: Date.now()
     },
   ];
 }
@@ -1217,3 +1258,4 @@ renderTable();
 </script>
 </body>
 </html>
+
