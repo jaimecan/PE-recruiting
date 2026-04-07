@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PE Recruiting — Jaime</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f7f4;
+    --surface: #ffffff;
+    --surface2: #f2f0ec;
+    --border: #e2ddd8;
+    --accent: #9a6f2e;
+    --accent2: #2d7a68;
+    --accent3: #a04d38;
+    --text: #1a1917;
+    --text-muted: #6b6760;
+    --text-dim: #a09d99;
+    --green: #2d7a57;
+    --yellow: #b8860b;
+    --red: #b55a44;
+    --blue: #3a8a78;
+    --purple: #6b5fa0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+    letter-spacing: -0.3px;
+  }
+
+  .logo span {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 400;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+
+  .stat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .stat-pill strong {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    background: var(--bg);
+  }
+
+  .tab {
+    padding: 12px 20px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .tab:hover { color: var(--text-muted); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  .main { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
+
+  /* VIEW PANELS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* FILTERS BAR */
+  .filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover { border-color: var(--text-dim); color: var(--text); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #ffffff; font-weight: 500; }
+
+  .filter-sep { width: 1px; height: 20px; background: var(--border); }
+
+  .search-input {
+    margin-left: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 6px 12px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+  }
+
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  /* TABLE */
+  .table-wrapper {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead {
+    background: var(--surface);
+  }
+
+  th {
+    padding: 11px 14px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  th:hover { color: var(--text-muted); }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface); }
+
+  td {
+    padding: 12px 14px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  .firm-name {
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .firm-strategy {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* STATUS BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+  }
+
+  .badge::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .badge-target { background: rgba(154,142,196,0.12); color: var(--purple); }
+  .badge-target::before { background: var(--purple); }
+  .badge-outreach { background: rgba(200,169,110,0.12); color: var(--yellow); }
+  .badge-outreach::before { background: var(--yellow); }
+  .badge-networking { background: rgba(126,184,164,0.12); color: var(--blue); }
+  .badge-networking::before { background: var(--blue); }
+  .badge-process { background: rgba(90,158,124,0.12); color: var(--green); }
+  .badge-process::before { background: var(--green); }
+  .badge-rejected { background: rgba(196,126,107,0.12); color: var(--red); }
+  .badge-rejected::before { background: var(--red); }
+  .badge-offer { background: rgba(90,158,124,0.2); color: #7ddfb0; }
+  .badge-offer::before { background: #7ddfb0; }
+
+  /* GEO TAG */
+  .geo-tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    background: var(--surface2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .geo-london { border-color: #7eb8a466; color: var(--blue); background: rgba(126,184,164,0.06); }
+  .geo-abudhabi { border-color: #c8a96e66; color: var(--yellow); background: rgba(200,169,110,0.06); }
+  .geo-madrid { border-color: #c47e6b66; color: var(--red); background: rgba(196,126,107,0.06); }
+  .geo-us { border-color: #9b8ec466; color: var(--purple); background: rgba(154,142,196,0.06); }
+
+  /* PRIORITY */
+  .priority {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+  }
+
+  .p1 { color: #e8856a; }
+  .p2 { color: var(--yellow); }
+  .p3 { color: var(--text-muted); }
+
+  /* NEXT ACTION */
+  .next-action {
+    font-size: 12px;
+    color: var(--text-muted);
+    max-width: 220px;
+  }
+
+  .next-action.overdue { color: var(--red); }
+  .next-action.soon { color: var(--yellow); }
+
+  /* DATE */
+  .date-cell {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .date-cell.overdue { color: var(--red); }
+  .date-cell.soon { color: var(--yellow); }
+
+  /* CONTACT */
+  .contact-cell {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ADD BUTTON */
+  .btn-add {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .btn-add:hover { opacity: 0.88; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 11px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  select option { background: var(--surface2); }
+  textarea { resize: vertical; min-height: 70px; }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  .btn-cancel {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .btn-save {
+    padding: 8px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-delete {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--red);
+    border-radius: 5px;
+    color: var(--red);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    margin-right: auto;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  .modal-close:hover { color: var(--text); }
+
+  /* PIPELINE VIEW */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    overflow-x: auto;
+  }
+
+  .pipeline-col {
+    min-width: 180px;
+  }
+
+  .pipeline-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 0 10px;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pipeline-count {
+    background: var(--surface2);
+    color: var(--text-muted);
+    border-radius: 10px;
+    padding: 1px 7px;
+    font-size: 10px;
+  }
+
+  .pipeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+
+  .pipeline-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .pc-firm { font-weight: 500; font-size: 13px; margin-bottom: 5px; }
+  .pc-geo { font-size: 10px; margin-bottom: 6px; }
+  .pc-action { font-size: 11px; color: var(--text-muted); font-style: italic; }
+  .pc-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-dim); margin-top: 5px; }
+
+  /* CALENDAR VIEW */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .week-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+  }
+
+  .week-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .cal-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cal-item:last-child { border-bottom: none; }
+
+  .cal-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    min-width: 32px;
+    margin-top: 1px;
+  }
+
+  .cal-text { font-size: 12px; color: var(--text-muted); }
+  .cal-firm { font-weight: 500; color: var(--text); font-size: 12px; }
+
+  /* STATS CARDS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* GEO breakdown */
+  .geo-breakdown {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  /* TOOLTIP */
+  .actions-cell {
+    white-space: nowrap;
+  }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: color 0.1s, background 0.1s;
+  }
+
+  .icon-btn:hover { color: var(--text); background: var(--surface2); }
+
+  /* NOTES PREVIEW */
+  .notes-preview {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 900px) {
+    .pipeline { grid-template-columns: repeat(3, 1fr); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .main { padding: 16px; }
+    .header { padding: 14px 16px; }
+    .tabs { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">PE Recruiting <span>// Wharton MBA 2027</span></div>
+  </div>
+  <div class="header-stats">
+    <div class="stat-pill"><strong id="h-total">0</strong>firms tracked</div>
+    <div class="stat-pill"><strong id="h-active">0</strong>active</div>
+    <div class="stat-pill"><strong id="h-next">—</strong>next action</div>
+    <button class="btn-add" onclick="openModal()">+ Add Firm</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('tracker')">Tracker</div>
+  <div class="tab" onclick="switchTab('pipeline')">Pipeline</div>
+  <div class="tab" onclick="switchTab('calendar')">Calendar</div>
+</div>
+
+<div class="main">
+
+  <!-- TRACKER VIEW -->
+  <div class="view active" id="view-tracker">
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Firms</div>
+        <div class="stat-value" id="s-total">0</div>
+        <div class="stat-sub" id="s-geo-breakdown">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">In Process</div>
+        <div class="stat-value" id="s-process" style="color:var(--green)">0</div>
+        <div class="stat-sub">interviews / final rounds</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Networking</div>
+        <div class="stat-value" id="s-network" style="color:var(--blue)">0</div>
+        <div class="stat-sub">active conversations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Overdue Actions</div>
+        <div class="stat-value" id="s-overdue" style="color:var(--red)">0</div>
+        <div class="stat-sub">need follow-up</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+      <div class="filter-sep"></div>
+      <button class="filter-btn" onclick="setFilter('Target', this)">Target</button>
+      <button class="filter-btn" onclick="setFilter('Outreach', this)">Outreach</button>
+      <button class="filter-btn" onclick="setFilter('Networking', this)">Networking</button>
+      <button class="filter-btn" onclick="setFilter('In Process', this)">In Process</button>
+      <button class="filter-btn" onclick="setFilter('Rejected', this)">Rejected</button>
+      <div class="filter-sep"></div>
+      <button class="filter-btn" onclick="setGeoFilter('London', this)">London</button>
+      <button class="filter-btn" onclick="setGeoFilter('Abu Dhabi', this)">Abu Dhabi</button>
+      <button class="filter-btn" onclick="setGeoFilter('Madrid', this)">Madrid</button>
+      <button class="filter-btn" onclick="setGeoFilter('US', this)">US</button>
+      <input class="search-input" type="text" placeholder="Search firms, contacts..." oninput="renderTable()" id="search-input">
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortBy('priority')">P ↕</th>
+            <th onclick="sortBy('firm')">Firm ↕</th>
+            <th onclick="sortBy('geo')">Geo</th>
+            <th>Strategy</th>
+            <th onclick="sortBy('status')">Status</th>
+            <th>Contact</th>
+            <th>Next Action</th>
+            <th onclick="sortBy('nextDate')">Date ↕</th>
+            <th>Notes</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          <tr><td colspan="10" class="empty">No firms yet. Click "+ Add Firm" to get started.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PIPELINE VIEW -->
+  <div class="view" id="view-pipeline">
+    <div class="pipeline" id="pipeline-board"></div>
+  </div>
+
+  <!-- CALENDAR VIEW -->
+  <div class="view" id="view-calendar">
+    <div style="margin-bottom:16px; font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); letter-spacing:0.5px;">
+      UPCOMING ACTIONS — next 8 weeks
+    </div>
+    <div class="calendar-grid" id="cal-grid"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title" id="modal-title">Add Firm</div>
+    <div class="form-grid">
+      <div class="form-group full">
+        <label>Firm Name *</label>
+        <input type="text" id="f-firm" placeholder="e.g. Cinven, Warburg Pincus…">
+      </div>
+      <div class="form-group">
+        <label>Geography *</label>
+        <select id="f-geo">
+          <option value="">Select…</option>
+          <option value="London">London</option>
+          <option value="Abu Dhabi">Abu Dhabi</option>
+          <option value="Madrid">Madrid</option>
+          <option value="US">US</option>
+          <option value="Multi">Multi-geo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Strategy</label>
+        <select id="f-strategy">
+          <option value="">Select…</option>
+          <option value="Buyout">Buyout</option>
+          <option value="Growth Equity">Growth Equity</option>
+          <option value="Infrastructure">Infrastructure</option>
+          <option value="Venture">Venture</option>
+          <option value="Credit">Credit</option>
+          <option value="Sovereign">Sovereign / SWF</option>
+          <option value="Distressed">Distressed</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Generalist">Generalist</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>AUM</label>
+        <input type="text" id="f-aum" placeholder="e.g. $20B">
+      </div>
+      <div class="form-group">
+        <label>Status *</label>
+        <select id="f-status">
+          <option value="Target">Target</option>
+          <option value="Outreach">Outreach Sent</option>
+          <option value="Networking">Networking</option>
+          <option value="In Process">In Process</option>
+          <option value="Rejected">Rejected</option>
+          <option value="Offer">Offer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Priority</label>
+        <select id="f-priority">
+          <option value="1">P1 — High</option>
+          <option value="2">P2 — Medium</option>
+          <option value="3">P3 — Low</option>
+        </select>
+      </div>
+      <div class="form-group full">
+        <label>Key Contact (Name / Title / Email)</label>
+        <input type="text" id="f-contact" placeholder="e.g. Hector Pérez — Associate — h@firm.com">
+      </div>
+      <div class="form-group full">
+        <label>Next Action</label>
+        <input type="text" id="f-action" placeholder="e.g. Follow up with headhunter, prep case study…">
+      </div>
+      <div class="form-group">
+        <label>Next Action Date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="form-group">
+        <label>Headhunter</label>
+        <input type="text" id="f-headhunter" placeholder="e.g. PER, Nordbridge, On-Lane…">
+      </div>
+      <div class="form-group full">
+        <label>Notes</label>
+        <textarea id="f-notes" placeholder="Investment focus, conversations, interview feedback, key names…"></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-delete" id="btn-delete" style="display:none" onclick="deleteFirm()">Delete</button>
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveFirm()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'pe_recruiting_v2';
+let firms = [];
+let editingId = null;
+let activeFilter = 'all';
+let activeGeoFilter = null;
+let sortField = 'priority';
+let sortDir = 1;
+
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    firms = raw ? JSON.parse(raw) : getDefaultData();
+  } catch(e) {
+    firms = getDefaultData();
+  }
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(firms));
+}
+
+function getDefaultData() {
+  // Pre-seeded with Jaime's known targets based on context
+  return [
+    {
+      id: uid(), firm: 'Mubadala Investment Company', geo: 'Abu Dhabi', strategy: 'Sovereign / SWF',
+      aum: '$300B+', status: 'In Process', priority: '1',
+      contact: 'VP Talent Partners (active contact)', action: 'Follow interview schedule',
+      nextDate: '', headhunter: 'Direct', notes: 'PE team, New York. Active process ongoing.', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Cinven', geo: 'London', strategy: 'Buyout',
+      aum: '~€18B', status: 'Target', priority: '1',
+      contact: '', action: 'Research fund + reach out to alumni',
+      nextDate: '', headhunter: 'PER / Nordbridge', notes: 'European mid-large buyout. Spanish background relevant.', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'CVC Capital Partners', geo: 'London', strategy: 'Buyout',
+      aum: '~€40B', status: 'Target', priority: '1',
+      contact: '', action: 'Find Wharton alumni at CVC',
+      nextDate: '', headhunter: '', notes: 'Strong presence in Spain (Deoleo, Cortefiel history). Relevant angle.', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Ardian', geo: 'Madrid', strategy: 'Buyout',
+      aum: '$160B+', status: 'Target', priority: '2',
+      contact: '', action: 'Network via Conferencia MBA España',
+      nextDate: '2026-04-18', headhunter: '', notes: 'Madrid office growing. Spanish speaker advantage.', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Permira', geo: 'London', strategy: 'Buyout',
+      aum: '$80B+', status: 'Target', priority: '1',
+      contact: '', action: 'Headhunter outreach via Nordbridge',
+      nextDate: '', headhunter: 'Nordbridge', notes: '', created: Date.now()
+    },
+    {
+      id: uid(), firm: 'Point72', geo: 'US', strategy: 'Generalist',
+      aum: '$34B', status: 'Outreach', priority: '2',
+      contact: '', action: 'Follow up on application',
+      nextDate: '', headhunter: 'Direct', notes: 'Wrote essay on Spanish medieval history + path dependency for application.', created: Date.now()
+    },
+  ];
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
+
+// ─── FILTERS ─────────────────────────────────────────────────────────────────
+function setFilter(f, btn) {
+  if (f === activeFilter) { activeFilter = 'all'; btn.classList.remove('active'); }
+  else {
+    activeFilter = f;
+    document.querySelectorAll('.filters .filter-btn').forEach(b => {
+      if (['Target','Outreach','Networking','In Process','Rejected'].includes(b.textContent)) b.classList.remove('active');
+      if (b.textContent === 'All') b.classList.remove('active');
+    });
+    btn.classList.add('active');
+  }
+  renderTable();
+}
+
+function setGeoFilter(g, btn) {
+  if (g === activeGeoFilter) { activeGeoFilter = null; btn.classList.remove('active'); }
+  else {
+    activeGeoFilter = g;
+    document.querySelectorAll('.filters .filter-btn').forEach(b => {
+      if (['London','Abu Dhabi','Madrid','US'].includes(b.textContent)) b.classList.remove('active');
+    });
+    btn.classList.add('active');
+  }
+  renderTable();
+}
+
+function getFiltered() {
+  const q = document.getElementById('search-input')?.value?.toLowerCase() || '';
+  return firms.filter(f => {
+    const statusMatch = activeFilter === 'all' || f.status === activeFilter;
+    const geoMatch = !activeGeoFilter || f.geo === activeGeoFilter;
+    const searchMatch = !q || [f.firm, f.contact, f.notes, f.headhunter, f.action].join(' ').toLowerCase().includes(q);
+    return statusMatch && geoMatch && searchMatch;
+  }).sort((a,b) => {
+    let av = a[sortField] || '', bv = b[sortField] || '';
+    if (sortField === 'priority') { av = parseInt(av)||9; bv = parseInt(bv)||9; }
+    if (av < bv) return -sortDir;
+    if (av > bv) return sortDir;
+    return 0;
+  });
+}
+
+function sortBy(field) {
+  if (sortField === field) sortDir *= -1;
+  else { sortField = field; sortDir = 1; }
+  renderTable();
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function statusBadge(status) {
+  const map = { 'Target':'target','Outreach Sent':'outreach','Networking':'networking','In Process':'process','Rejected':'rejected','Offer':'offer' };
+  const key = Object.keys(map).find(k => status === k) || 'target';
+  return `<span class="badge badge-${map[key]||'target'}">${status}</span>`;
+}
+
+function geoBadge(geo) {
+  const cls = { London:'geo-london','Abu Dhabi':'geo-abudhabi', Madrid:'geo-madrid', US:'geo-us' };
+  return `<span class="geo-tag ${cls[geo]||''}">${geo}</span>`;
+}
+
+function dateCls(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr), now = new Date();
+  now.setHours(0,0,0,0); d.setHours(0,0,0,0);
+  const diff = (d-now) / 86400000;
+  if (diff < 0) return 'overdue';
+  if (diff <= 4) return 'soon';
+  return '';
+}
+
+function fmtDate(dateStr) {
+  if (!dateStr) return '—';
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' });
+}
+
+function renderTable() {
+  const data = getFiltered();
+  const tbody = document.getElementById('table-body');
+
+  if (!data.length) {
+    tbody.innerHTML = `<tr><td colspan="10" class="empty">No firms match current filters.</td></tr>`;
+    updateStats(); return;
+  }
+
+  tbody.innerHTML = data.map(f => {
+    const dc = dateCls(f.nextDate);
+    const p = parseInt(f.priority)||2;
+    const pLabel = ['','P1','P2','P3'][p] || 'P2';
+    const pClass = ['','p1','p2','p3'][p] || 'p2';
+    return `<tr onclick="openModal('${f.id}')">
+      <td><span class="priority ${pClass}">${pLabel}</span></td>
+      <td>
+        <div class="firm-name">${f.firm}</div>
+        ${f.aum ? `<div class="firm-strategy">${f.aum}</div>` : ''}
+      </td>
+      <td>${geoBadge(f.geo)}</td>
+      <td style="font-size:12px;color:var(--text-muted)">${f.strategy||'—'}</td>
+      <td>${statusBadge(f.status)}</td>
+      <td class="contact-cell">${f.contact ? f.contact.split('—')[0].trim() : '—'}</td>
+      <td><div class="next-action ${dc}">${f.action||'—'}</div></td>
+      <td><span class="date-cell ${dc}">${fmtDate(f.nextDate)}</span></td>
+      <td><div class="notes-preview">${f.notes||''}</div></td>
+      <td class="actions-cell">
+        <button class="icon-btn" onclick="event.stopPropagation();openModal('${f.id}')">✎</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  updateStats();
+}
+
+function updateStats() {
+  const total = firms.length;
+  const inProcess = firms.filter(f => f.status === 'In Process').length;
+  const networking = firms.filter(f => f.status === 'Networking').length;
+  const overdue = firms.filter(f => f.nextDate && dateCls(f.nextDate) === 'overdue').length;
+
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-process').textContent = inProcess;
+  document.getElementById('s-network').textContent = networking;
+  document.getElementById('s-overdue').textContent = overdue;
+
+  // Geo breakdown
+  const geos = ['London','Abu Dhabi','Madrid','US'];
+  const geoCounts = geos.map(g => `${g}: ${firms.filter(f=>f.geo===g).length}`).join(' · ');
+  document.getElementById('s-geo-breakdown').textContent = geoCounts;
+
+  // Header stats
+  document.getElementById('h-total').textContent = total;
+  document.getElementById('h-active').textContent = firms.filter(f => !['Rejected','Offer'].includes(f.status)).length;
+
+  const upcoming = firms.filter(f => f.nextDate && dateCls(f.nextDate) !== '')
+    .sort((a,b) => a.nextDate.localeCompare(b.nextDate))[0];
+  document.getElementById('h-next').textContent = upcoming ? `${upcoming.firm.split(' ')[0]} ${fmtDate(upcoming.nextDate)}` : '—';
+}
+
+function renderPipeline() {
+  const stages = ['Target','Outreach Sent','Networking','In Process','Rejected','Offer'];
+  const board = document.getElementById('pipeline-board');
+  board.innerHTML = stages.map(stage => {
+    const cards = firms.filter(f => f.status === stage);
+    return `<div class="pipeline-col">
+      <div class="pipeline-header">
+        <span>${stage}</span>
+        <span class="pipeline-count">${cards.length}</span>
+      </div>
+      ${cards.length ? cards.map(f => `
+        <div class="pipeline-card" onclick="openModal('${f.id}')">
+          <div class="pc-firm">${f.firm}</div>
+          <div class="pc-geo">${geoBadge(f.geo)}</div>
+          ${f.action ? `<div class="pc-action">${f.action}</div>` : ''}
+          ${f.nextDate ? `<div class="pc-date">${fmtDate(f.nextDate)}</div>` : ''}
+        </div>`).join('') : `<div style="font-size:11px;color:var(--text-dim);font-family:'DM Mono',monospace;padding:8px 0">empty</div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderCalendar() {
+  const grid = document.getElementById('cal-grid');
+  const now = new Date(); now.setHours(0,0,0,0);
+  const weeks = 8;
+
+  const withDates = firms.filter(f => f.nextDate).sort((a,b)=>a.nextDate.localeCompare(b.nextDate));
+
+  // Group by week
+  const weekMap = {};
+  withDates.forEach(f => {
+    const d = new Date(f.nextDate + 'T00:00:00');
+    const diff = Math.floor((d - now) / (7*86400000));
+    const wk = Math.max(0, diff);
+    if (wk < weeks) {
+      if (!weekMap[wk]) weekMap[wk] = [];
+      weekMap[wk].push(f);
+    }
+  });
+
+  const html = [];
+  for (let w = 0; w < weeks; w++) {
+    const wStart = new Date(now); wStart.setDate(now.getDate() + w*7);
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate()+6);
+    const label = `Week of ${wStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})}`;
+    const items = weekMap[w] || [];
+    html.push(`<div class="week-block">
+      <div class="week-label">${label}</div>
+      ${items.length ? items.map(f => `
+        <div class="cal-item" onclick="openModal('${f.id}')" style="cursor:pointer">
+          <div class="cal-date">${fmtDate(f.nextDate)}</div>
+          <div>
+            <div class="cal-firm">${f.firm}</div>
+            <div class="cal-text">${f.action||''}</div>
+          </div>
+        </div>`).join('') : `<div class="cal-item"><div class="cal-text" style="color:var(--text-dim)">No actions</div></div>`}
+    </div>`);
+  }
+  grid.innerHTML = html.join('');
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function openModal(id) {
+  editingId = id || null;
+  const modal = document.getElementById('modal-overlay');
+  const title = document.getElementById('modal-title');
+  const del = document.getElementById('btn-delete');
+
+  if (id) {
+    const f = firms.find(x => x.id === id);
+    if (!f) return;
+    title.textContent = 'Edit Firm';
+    del.style.display = 'block';
+    document.getElementById('f-firm').value = f.firm;
+    document.getElementById('f-geo').value = f.geo;
+    document.getElementById('f-strategy').value = f.strategy || '';
+    document.getElementById('f-aum').value = f.aum || '';
+    document.getElementById('f-status').value = f.status;
+    document.getElementById('f-priority').value = f.priority || '2';
+    document.getElementById('f-contact').value = f.contact || '';
+    document.getElementById('f-action').value = f.action || '';
+    document.getElementById('f-date').value = f.nextDate || '';
+    document.getElementById('f-headhunter').value = f.headhunter || '';
+    document.getElementById('f-notes').value = f.notes || '';
+  } else {
+    title.textContent = 'Add Firm';
+    del.style.display = 'none';
+    ['f-firm','f-aum','f-contact','f-action','f-date','f-headhunter','f-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-geo').value = '';
+    document.getElementById('f-strategy').value = '';
+    document.getElementById('f-status').value = 'Target';
+    document.getElementById('f-priority').value = '1';
+  }
+
+  modal.classList.add('open');
+  document.getElementById('f-firm').focus();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  editingId = null;
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function saveFirm() {
+  const firm = document.getElementById('f-firm').value.trim();
+  const geo = document.getElementById('f-geo').value;
+  const status = document.getElementById('f-status').value;
+  if (!firm || !geo || !status) { alert('Firm name, geography, and status are required.'); return; }
+
+  const data = {
+    firm,
+    geo,
+    strategy: document.getElementById('f-strategy').value,
+    aum: document.getElementById('f-aum').value.trim(),
+    status,
+    priority: document.getElementById('f-priority').value,
+    contact: document.getElementById('f-contact').value.trim(),
+    action: document.getElementById('f-action').value.trim(),
+    nextDate: document.getElementById('f-date').value,
+    headhunter: document.getElementById('f-headhunter').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = firms.findIndex(f => f.id === editingId);
+    if (idx >= 0) firms[idx] = { ...firms[idx], ...data };
+  } else {
+    firms.push({ id: uid(), created: Date.now(), ...data });
+  }
+
+  save();
+  closeModal();
+  refresh();
+}
+
+function deleteFirm() {
+  if (!editingId) return;
+  if (!confirm('Remove this firm from your tracker?')) return;
+  firms = firms.filter(f => f.id !== editingId);
+  save();
+  closeModal();
+  refresh();
+}
+
+// ─── TABS ────────────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    const tabs = ['tracker','pipeline','calendar'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(`view-${tab}`).classList.add('active');
+  if (tab === 'pipeline') renderPipeline();
+  if (tab === 'calendar') renderCalendar();
+}
+
+function refresh() {
+  renderTable();
+  renderPipeline();
+  renderCalendar();
+}
+
+// ─── KEYBOARD ────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
+});
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+load();
+renderTable();
+</script>
+</body>
+</html>
