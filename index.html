@@ -7,11 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
-:root {
-  --bg:#f8f7f4;--surface:#fff;--surface2:#f2f0ec;--border:#e2ddd8;
-  --accent:#9a6f2e;--text:#1a1917;--text-muted:#6b6760;--text-dim:#a09d99;
-  --green:#2d7a57;--yellow:#b8860b;--red:#b55a44;--blue:#3a8a78;--purple:#6b5fa0;--hh:#4a7fa5;
-}
+:root{--bg:#f8f7f4;--surface:#fff;--surface2:#f2f0ec;--border:#e2ddd8;--accent:#9a6f2e;--text:#1a1917;--text-muted:#6b6760;--text-dim:#a09d99;--green:#2d7a57;--yellow:#b8860b;--red:#b55a44;--blue:#3a8a78;--purple:#6b5fa0;--hh:#4a7fa5;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;min-height:100vh;}
 .header{border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg);z-index:100;}
@@ -26,6 +22,8 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 .btn-briefing{display:flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;color:var(--blue);border:1px solid var(--blue);border-radius:5px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
 .btn-briefing:hover{background:var(--blue);color:#fff;}
 .btn-briefing:disabled{opacity:0.5;cursor:default;}
+.btn-export{display:flex;align-items:center;gap:6px;padding:7px 14px;background:transparent;color:var(--text-muted);border:1px solid var(--border);border-radius:5px;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.15s;white-space:nowrap;}
+.btn-export:hover{border-color:var(--text-muted);color:var(--text);}
 .tabs{display:flex;border-bottom:1px solid var(--border);padding:0 32px;background:var(--bg);}
 .tab{padding:12px 20px;font-size:12px;font-family:'DM Mono',monospace;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;user-select:none;}
 .tab:hover{color:var(--text-muted);}
@@ -139,7 +137,6 @@ textarea{resize:vertical;min-height:65px;}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo">PE Recruiting <span>// Wharton MBA 2027</span></div>
   <div class="header-stats">
@@ -147,17 +144,16 @@ textarea{resize:vertical;min-height:65px;}
     <div class="stat-pill hh-pill"><strong id="h-hh">0</strong>headhunters</div>
     <div class="stat-pill"><strong id="h-active">0</strong>active</div>
     <div class="stat-pill"><strong id="h-next">—</strong>next action</div>
+    <button class="btn-export" onclick="exportBackup()">💾 Backup</button>
     <button class="btn-briefing" id="briefing-btn" onclick="sendBriefing()">📧 Today's Briefing</button>
     <button class="btn-add" onclick="openModal()">+ Add Entry</button>
   </div>
 </div>
-
 <div class="tabs">
   <div class="tab active" onclick="switchTab('tracker')">Tracker</div>
   <div class="tab" onclick="switchTab('pipeline')">Pipeline</div>
   <div class="tab" onclick="switchTab('calendar')">Calendar</div>
 </div>
-
 <div class="main">
   <div class="view active" id="view-tracker">
     <div class="stats-row">
@@ -192,7 +188,6 @@ textarea{resize:vertical;min-height:65px;}
     <div class="calendar-grid" id="cal-grid"></div>
   </div>
 </div>
-
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
   <div class="modal">
@@ -232,124 +227,71 @@ textarea{resize:vertical;min-height:65px;}
     </div>
   </div>
 </div>
-
 <script>
-// ── EMAILJS CONFIG ─────────────────────────────────────────────────────────────
-// HOW TO SET UP (5 min):
-// 1. Go to emailjs.com → sign up free
-// 2. Email Services → Add Service → Gmail → connect your account
-//    → you'll see a Service ID like "service_abc123" — paste it below
-// 3. Email Templates → Create Template → set Subject + Body (see instructions below)
-//    → copy the Template ID like "template_xyz789" — paste it below
-// 4. Account → API Keys → copy your Public Key — paste it below
-// 5. Upload to GitHub — done!
-//
-// EMAIL TEMPLATE BODY to paste in EmailJS:
-// Subject: 🎯 PE Recruiting — {{date}}
-// Body:
-//   Hi Jaime 👋
-//   Here's your PE recruiting briefing for {{date}}.
-//
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   🔴 OVERDUE — Act on these
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   {{overdue_section}}
-//
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   📌 DUE TODAY
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   {{today_section}}
-//
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   📅 COMING UP THIS WEEK
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   {{upcoming_section}}
-//
-//   ━━━━━━━━━━━━━━━━━━━━━━━━
-//   Keep pushing — Wharton 2027 🦁
-
+// ── EMAILJS ────────────────────────────────────────────────────────────────
 const EMAILJS_PUBLIC_KEY  = 'B1LSI_IU-0xqYml-j';
 const EMAILJS_SERVICE_ID  = 'service_q2bo4xm';
 const EMAILJS_TEMPLATE_ID = 'template_2gbfvza';
 const RECIPIENT_EMAIL     = 'jaimecan@wharton.upenn.edu';
-
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
-function fmtRow(f) {
-  const icon = f.type === 'headhunter' ? '🤝' : '🏦';
-  const contact = f.contact && f.contact !== '—' && f.contact !== '' ? '\n   👤 ' + f.contact : '';
-  return icon + ' ' + f.firm + ' (' + f.geo + ')\n   → ' + f.action + contact;
+function fmtRow(f){
+  var icon=f.type==='headhunter'?'🤝':'🏦';
+  var contact=f.contact&&f.contact!=='—'&&f.contact!==''?'\n   👤 '+f.contact:'';
+  return icon+' '+f.firm+' ('+f.geo+')\n   → '+f.action+contact;
 }
 
-function sendBriefing() {
-  const btn = document.getElementById('briefing-btn');
-  const today = new Date(); today.setHours(0,0,0,0);
-  const todayStr = today.toISOString().split('T')[0];
-
-  const overdue = firms.filter(f => f.nextDate && new Date(f.nextDate+'T00:00:00') < today);
-  const dueToday = firms.filter(f => f.nextDate === todayStr);
-  const upcoming = firms.filter(f => {
-    if (!f.nextDate) return false;
-    const d = new Date(f.nextDate+'T00:00:00');
-    const diff = (d - today) / 86400000;
-    return diff > 0 && diff <= 7;
-  }).sort((a,b) => a.nextDate.localeCompare(b.nextDate));
-
-  if (!overdue.length && !dueToday.length) {
-    alert('✅ Nothing overdue or due today — you\'re on top of it!');
-    return;
-  }
-
-  if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-    // Preview mode — show what would be sent
-    const preview = '📧 PREVIEW (EmailJS not configured yet)\n\n'
-      + '🔴 OVERDUE:\n' + (overdue.length ? overdue.map(fmtRow).join('\n\n') : '(none)') + '\n\n'
-      + '📌 DUE TODAY:\n' + (dueToday.length ? dueToday.map(fmtRow).join('\n\n') : '(none)') + '\n\n'
-      + '📅 THIS WEEK:\n' + (upcoming.length ? upcoming.map(f => fmtRow(f)).join('\n\n') : '(none)');
-    alert(preview);
-    return;
-  }
-
-  const overdueSection = overdue.length ? overdue.map(fmtRow).join('\n\n') : '✅ Nothing overdue — great work!';
-  const todaySection = dueToday.length ? dueToday.map(fmtRow).join('\n\n') : '(none due today)';
-  const upcomingSection = upcoming.length ? upcoming.map(f => '📆 ' + fmtDate(f.nextDate) + '\n' + fmtRow(f)).join('\n\n') : '(nothing in the next 7 days)';
-  const dateLabel = today.toLocaleDateString('en-GB', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
-
-  btn.disabled = true;
-  btn.textContent = '⏳ Sending…';
-
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-    to_email: RECIPIENT_EMAIL,
-    date: dateLabel,
-    overdue_section: overdueSection,
-    today_section: todaySection,
-    upcoming_section: upcomingSection,
-  }).then(() => {
-    btn.textContent = '✓ Sent!';
-    setTimeout(() => { btn.disabled = false; btn.textContent = '📧 Today\'s Briefing'; }, 3000);
-  }).catch(err => {
-    console.error(err);
-    btn.textContent = '✗ Failed';
-    alert('Send failed. Check your EmailJS config in the HTML.\n\n' + JSON.stringify(err));
-    setTimeout(() => { btn.disabled = false; btn.textContent = '📧 Today\'s Briefing'; }, 3000);
-  });
+function sendBriefing(){
+  var btn=document.getElementById('briefing-btn');
+  var today=new Date();today.setHours(0,0,0,0);
+  var todayStr=today.toISOString().split('T')[0];
+  var overdue=firms.filter(function(f){return f.nextDate&&new Date(f.nextDate+'T00:00:00')<today;});
+  var dueToday=firms.filter(function(f){return f.nextDate===todayStr;});
+  var upcoming=firms.filter(function(f){
+    if(!f.nextDate)return false;
+    var d=new Date(f.nextDate+'T00:00:00');
+    var diff=(d-today)/86400000;
+    return diff>0&&diff<=7;
+  }).sort(function(a,b){return a.nextDate.localeCompare(b.nextDate);});
+  if(!overdue.length&&!dueToday.length){alert('Nothing overdue or due today!');return;}
+  var overdueSection=overdue.length?overdue.map(fmtRow).join('\n\n'):'Nothing overdue — great work!';
+  var todaySection=dueToday.length?dueToday.map(fmtRow).join('\n\n'):'(none due today)';
+  var upcomingSection=upcoming.length?upcoming.map(function(f){return '📆 '+fmtDate(f.nextDate)+'\n'+fmtRow(f);}).join('\n\n'):'(nothing in the next 7 days)';
+  var dateLabel=today.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  btn.disabled=true;btn.textContent='⏳ Sending…';
+  emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:RECIPIENT_EMAIL,date:dateLabel,overdue_section:overdueSection,today_section:todaySection,upcoming_section:upcomingSection})
+  .then(function(){btn.textContent='✓ Sent!';setTimeout(function(){btn.disabled=false;btn.textContent='📧 Today\'s Briefing';},3000);})
+  .catch(function(err){btn.textContent='✗ Failed';alert('Send failed: '+JSON.stringify(err));setTimeout(function(){btn.disabled=false;btn.textContent='📧 Today\'s Briefing';},3000);});
 }
 
-// ── DATA ──────────────────────────────────────────────────────────────────────
-const STORAGE_KEY = 'pe_recruiting_v3';
-let firms = [];
-let editingId = null;
-let activeTypeFilter = 'all';
-let activeStatusFilter = null;
-let activeGeoFilter = null;
-let modalType = 'fund';
+// ── EXPORT BACKUP ─────────────────────────────────────────────────────────
+function exportBackup(){
+  var data=localStorage.getItem(STORAGE_KEY)||'[]';
+  var blob=new Blob([data],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  var today=new Date().toISOString().split('T')[0];
+  a.href=url;a.download='pe-recruiting-backup-'+today+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ── CORE DATA ─────────────────────────────────────────────────────────────
+const STORAGE_KEY='pe_recruiting_v3';
+var firms=[];
+var editingId=null;
+var activeTypeFilter='all';
+var activeStatusFilter=null;
+var activeGeoFilter=null;
+var modalType='fund';
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
 function dateCls(d){
   if(!d)return'';
-  const dt=new Date(d),now=new Date();
+  var dt=new Date(d),now=new Date();
   now.setHours(0,0,0,0);dt.setHours(0,0,0,0);
-  const diff=(dt-now)/86400000;
+  var diff=(dt-now)/86400000;
   if(diff<0)return'overdue';if(diff<=4)return'soon';return'';
 }
 function fmtDate(d){
@@ -357,80 +299,43 @@ function fmtDate(d){
   return new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
 }
 function statusBadge(s){
-  const map={'Target':'target','Outreach Sent':'outreach','Networking':'networking','In Process':'process','Rejected':'rejected','Offer':'offer','Registered':'registered'};
+  var map={'Target':'target','Outreach Sent':'outreach','Networking':'networking','In Process':'process','Rejected':'rejected','Offer':'offer','Registered':'registered'};
   return'<span class="badge badge-'+(map[s]||'target')+'">'+s+'</span>';
 }
 function geoBadge(g){
-  const cls={London:'geo-london','Abu Dhabi':'geo-abudhabi',Madrid:'geo-madrid',US:'geo-us'};
+  var cls={London:'geo-london','Abu Dhabi':'geo-abudhabi',Madrid:'geo-madrid',US:'geo-us'};
   return'<span class="geo-tag '+(cls[g]||'')+'">'+g+'</span>';
 }
-function hhDate(i){const d=new Date('2026-04-08');d.setDate(d.getDate()+Math.floor(i/3));return d.toISOString().split('T')[0];}
 
-// ── SEED DATA ─────────────────────────────────────────────────────────────────
-const SEED_FUNDS=[
-  {id:'mno18fzd8u2ijzn0pde',type:'fund',firm:'Mubadala',geo:'US',strategy:'Sovereign',aum:'',status:'In Process',priority:'1',contact:'Reem Abdulla Al Shamsi',action:'Follow interview schedule',nextDate:'',headhunter:'Direct',notes:'PE team, New York. Active process ongoing.',created:1775530865641},
-  {id:'mno18fzd308tyl7wtqw',type:'fund',firm:'Bridgepoint',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Hector Pérez',action:'Network Wharton',nextDate:'2026-04-07',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdi9it58ln79',type:'fund',firm:'KKR',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Iñaki Cobos',action:'Network Iñaki Cobos (Spanish MBA Conference)',nextDate:'2026-04-17',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdooyzknewjr',type:'fund',firm:'Permira',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Lucy Walker',action:'Follow-up proceso Madrid',nextDate:'2026-09-01',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdzwuzyvuojeh',type:'fund',firm:'Cinven',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Escribir Álvaro Fraguas',nextDate:'2026-05-12',headhunter:'',notes:'Escribir amigo Álvaro Fraguas.',created:1775530865641},
-  {id:'mno18fzdcgyt28kyra',type:'fund',firm:'EQT',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Buscar Wharton alumni en EQT London',nextDate:'2026-05-17',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzd5eqi7ufko26',type:'fund',firm:'CVC',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Javier Pasquín',action:'Follow-up on processes',nextDate:'2026-05-19',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdbase64aa',type:'fund',firm:'EQT',geo:'US',strategy:'Infrastructure',aum:'',status:'Target',priority:'1',contact:'Bea Garí',action:'Escribir en junio',nextDate:'2026-06-08',headhunter:'',notes:'Escribir a Bea Garí y preguntar por tie...',created:1775530865641},
-  {id:'mno18fzdpgmvwfoy93',type:'fund',firm:'HIG (Miami)',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Samantha Schiff',action:'Follow-up for coffee chat',nextDate:'2026-06-15',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdrujftv22lzm',type:'fund',firm:'L Catterton (Miami)',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look and network',nextDate:'2026-06-15',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdkcaopwe3je',type:'fund',firm:'Ardian',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Antonio Costa?',action:'Follow-up con Antonio post-verano',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdncmoeetv2qd',type:'fund',firm:'Warburg Pincus',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Ricardo de Serdio',action:'Escribir en septiembre',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno18fzdeidxiv7zqjl',type:'fund',firm:'Advent',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Ramón Arocena',action:'Escribir en septiembre',nextDate:'2026-09-06',headhunter:'',notes:'',created:1775530865641},
-  {id:'mno1g1eyjuxoz5936bc',type:'fund',firm:'KKR',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Laali Vadlamani',action:'Follow-up in August',nextDate:'2026-08-10',headhunter:'',notes:'Follow-up and ask for any active processes',created:1775531220010},
-  {id:'mno1pmqe6e168lstant',type:'fund',firm:'General Atlantic',geo:'US',strategy:'Growth Equity',aum:'',status:'Target',priority:'2',contact:'',action:'Reach-out to Wharton alumni',nextDate:'2026-05-11',headhunter:'',notes:'',created:1775531667542},
-  {id:'mno1rbkz5msz55wvl9d',type:'fund',firm:'Apollo',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'[Look for visit]',action:'Follow-up and ask for HH referal',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531746403},
-  {id:'mno1s8v5apm1c0hl5eu',type:'fund',firm:'Apax',geo:'US',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'[Look for visit]',action:'Follow-up with HH referal',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531789537},
-  {id:'mno1t7dzuu342rlk9rf',type:'fund',firm:'MGX',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531834279},
-  {id:'mno1tval5un7qgdzzn6',type:'fund',firm:'ADIA',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531865261},
-  {id:'mno1u6ykye8ix4vo5b',type:'fund',firm:'Mubadala',geo:'Abu Dhabi',strategy:'Sovereign',aum:'',status:'Target',priority:'1',contact:'PER',action:'Reach-out to PER and actively ask',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775531880380},
-  {id:'mno1uy3dggf0mbqja3q',type:'fund',firm:'Bridgepoint',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni and network',nextDate:'2026-05-10',headhunter:'',notes:'',created:1775531915545},
-  {id:'mno1wguu4ozthwp9nr7',type:'fund',firm:'Carlyle',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Filip Jaksik',action:'Cold reach-out',nextDate:'2026-08-03',headhunter:'',notes:'',created:1775531986518},
-  {id:'mno1xjt6833tnoxjobp',type:'fund',firm:'CVC',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Alonso de las Fuentes',action:'Reach-out ask for HR intro',nextDate:'2026-06-08',headhunter:'',notes:'',created:1775532037002},
-  {id:'mno1yilskxv7goui6x',type:'fund',firm:'Partners Group',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Anselmo García',action:'Ask for HR intro',nextDate:'2026-06-08',headhunter:'',notes:'',created:1775532082096},
-  {id:'mno1zdu1x1zjy9ah118',type:'fund',firm:'General Atlantic',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532122569},
-  {id:'mno20cvigfnyofr92v7',type:'fund',firm:'Permira',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Pallete',action:'Active recruiting',nextDate:'2026-09-08',headhunter:'',notes:'',created:1775532167982},
-  {id:'mno21wj9e02tl4ih1ci',type:'fund',firm:'Advent',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Ask for contact in HR (Juan?) + Spanish',nextDate:'2026-09-08',headhunter:'',notes:'',created:1775532240117},
-  {id:'mno22z496ib3jn3ijdk',type:'fund',firm:'Blackstone',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Lola Basabe',action:'Reach-out to understand hiring needs',nextDate:'2026-06-10',headhunter:'',notes:'',created:1775532290121},
-  {id:'mno23xm8tgy4m3hspx',type:'fund',firm:'Apollo',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton/MBA alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532334832},
-  {id:'mno24kftrg87y2kubh',type:'fund',firm:'PAI Partners',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532364409},
-  {id:'mno25orduzgnx39nn2',type:'fund',firm:'Bain Capital',geo:'London',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'Look for Wharton alumni',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532416665},
-  {id:'mno275whqd11qugsbza',type:'fund',firm:'EQT',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Carlos Santana',action:'Follow-up',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532485537},
-  {id:'mno27q7cq0wvn4l02yf',type:'fund',firm:'Carlyle',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Isabel Jurado',action:'Escribir para proceso',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532511848},
-  {id:'mno28rg68bcztywqwaw',type:'fund',firm:'PAI Partners',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'Raul Cánovas',action:'Escribir',nextDate:'2026-09-03',headhunter:'',notes:'',created:1775532560118},
-  {id:'mno2bdtttohi7u7jd9j',type:'fund',firm:'ALEJANDRO MEJÍAS',geo:'Madrid',strategy:'Buyout',aum:'',status:'Target',priority:'1',contact:'',action:'ESCRIBIR MEJÍAS SENTADAS PE ESPAÑA',nextDate:'2026-04-09',headhunter:'',notes:'',created:1775532682433},
-  {id:'mnoo77b9zalsyrg8ztq',type:'fund',firm:'Emerging Globe (Headhunter)',geo:'Multi',strategy:'',aum:'',status:'Target',priority:'1',contact:'resumes@emergingglobe.com',action:'Escribir para call introductoria',nextDate:'2026-04-08',headhunter:'',notes:'https://www.emergingglobe.com/meet-the-relationship-recruiters',created:1775569438917},
-];
+// ── SEED: your full current 63-entry dataset + 9 new UK HH ────────────────
+var SEED_DATA=[{"id":"mno18fzd8u2ijzn0pde","type":"fund","firm":"Mubadala","geo":"US","strategy":"Sovereign","aum":"","status":"In Process","priority":"1","contact":"Reem Abdulla Al Shamsi","action":"Follow interview schedule","nextDate":"","headhunter":"Direct","notes":"PE team, New York. Active process ongoing.","created":1775530865641},{"id":"mno18fzd308tyl7wtqw","type":"fund","firm":"Bridgepoint","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Hector Pérez","action":"Network Wharton","nextDate":"2026-04-07","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdi9it58ln79","type":"fund","firm":"KKR","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Iñaki Cobos","action":"Network Iñaki Cobos (Spanish MBA Conference)","nextDate":"2026-04-17","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdooyzknewjr","type":"fund","firm":"Permira","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Lucy Walker","action":"Follow-up proceso Madrid","nextDate":"2026-09-01","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdzwuzyvuojeh","type":"fund","firm":"Cinven","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Escribir Álvaro Fraguas","nextDate":"2026-05-12","headhunter":"","notes":"Escribir amigo Álvaro Fraguas.","created":1775530865641},{"id":"mno18fzdcgyt28kyra","type":"fund","firm":"EQT","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Buscar Wharton alumni en EQT London","nextDate":"2026-05-17","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzd5eqi7ufko26","type":"fund","firm":"CVC","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Javier Pasquín","action":"Follow-up on processes","nextDate":"2026-05-19","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdbase64aa","type":"fund","firm":"EQT","geo":"US","strategy":"Infrastructure","aum":"","status":"Target","priority":"1","contact":"Bea Garí","action":"Escribir en junio","nextDate":"2026-06-08","headhunter":"","notes":"Escribir a Bea Garí y preguntar por tie...","created":1775530865641},{"id":"mno18fzdpgmvwfoy93","type":"fund","firm":"HIG (Miami)","geo":"US","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Samantha Schiff","action":"Follow-up for coffee chat","nextDate":"2026-06-15","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdrujftv22lzm","type":"fund","firm":"L Catterton (Miami)","geo":"US","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look and network","nextDate":"2026-06-15","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdkcaopwe3je","type":"fund","firm":"Ardian","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Antonio Costa?","action":"Follow-up con Antonio post-verano","nextDate":"2026-09-06","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdncmoeetv2qd","type":"fund","firm":"Warburg Pincus","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Ricardo de Serdio","action":"Escribir en septiembre","nextDate":"2026-09-06","headhunter":"","notes":"","created":1775530865641},{"id":"mno18fzdeidxiv7zqjl","type":"fund","firm":"Advent","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Ramón Arocena","action":"Escribir en septiembre","nextDate":"2026-09-06","headhunter":"","notes":"","created":1775530865641},{"id":"mno1g1eyjuxoz5936bc","type":"fund","firm":"KKR","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Laali Vadlamani","action":"Follow-up in August","nextDate":"2026-08-10","headhunter":"","notes":"Follow-up and ask for any active processes","created":1775531220010},{"id":"mno1pmqe6e168lstant","type":"fund","firm":"General Atlantic","geo":"US","strategy":"Growth Equity","aum":"","status":"Target","priority":"2","contact":"","action":"Reach-out to Wharton alumni","nextDate":"2026-05-11","headhunter":"","notes":"","created":1775531667542},{"id":"mno1rbkz5msz55wvl9d","type":"fund","firm":"Apollo","geo":"US","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"[Look for visit]","action":"Follow-up and ask for HH referal","nextDate":"2026-05-10","headhunter":"","notes":"","created":1775531746403},{"id":"mno1s8v5apm1c0hl5eu","type":"fund","firm":"Apax","geo":"US","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"[Look for visit]","action":"Follow-up with HH referal","nextDate":"2026-05-10","headhunter":"","notes":"","created":1775531789537},{"id":"mno1t7dzuu342rlk9rf","type":"fund","firm":"MGX","geo":"Abu Dhabi","strategy":"Sovereign","aum":"","status":"Target","priority":"1","contact":"PER","action":"Reach-out to PER and actively ask","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775531834279},{"id":"mno1tval5un7qgdzzn6","type":"fund","firm":"ADIA","geo":"Abu Dhabi","strategy":"Sovereign","aum":"","status":"Target","priority":"1","contact":"PER","action":"Reach-out to PER and actively ask","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775531865261},{"id":"mno1u6ykye8ix4vo5b","type":"fund","firm":"Mubadala","geo":"Abu Dhabi","strategy":"Sovereign","aum":"","status":"Target","priority":"1","contact":"PER","action":"Reach-out to PER and actively ask","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775531880380},{"id":"mno1uy3dggf0mbqja3q","type":"fund","firm":"Bridgepoint","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look for Wharton alumni and network","nextDate":"2026-05-10","headhunter":"","notes":"","created":1775531915545},{"id":"mno1wguu4ozthwp9nr7","type":"fund","firm":"Carlyle","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Filip Jaksik","action":"Cold reach-out","nextDate":"2026-08-03","headhunter":"","notes":"","created":1775531986518},{"id":"mno1xjt6833tnoxjobp","type":"fund","firm":"CVC","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Alonso de las Fuentes","action":"Reach-out ask for HR intro","nextDate":"2026-06-08","headhunter":"","notes":"","created":1775532037002},{"id":"mno1yilskxv7goui6x","type":"fund","firm":"Partners Group","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Anselmo García","action":"Ask for HR intro","nextDate":"2026-06-08","headhunter":"","notes":"","created":1775532082096},{"id":"mno1zdu1x1zjy9ah118","type":"fund","firm":"General Atlantic","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look for Wharton alumni","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532122569},{"id":"mno20cvigfnyofr92v7","type":"fund","firm":"Permira","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Pallete","action":"Active recruiting","nextDate":"2026-09-08","headhunter":"","notes":"","created":1775532167982},{"id":"mno21wj9e02tl4ih1ci","type":"fund","firm":"Advent","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Ask for contact in HR (Juan?) + Spanish","nextDate":"2026-09-08","headhunter":"","notes":"","created":1775532240117},{"id":"mno22z496ib3jn3ijdk","type":"fund","firm":"Blackstone","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Lola Basabe","action":"Reach-out to understand hiring needs","nextDate":"2026-06-10","headhunter":"","notes":"","created":1775532290121},{"id":"mno23xm8tgy4m3hspx","type":"fund","firm":"Apollo","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look for Wharton/MBA alumni","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532334832},{"id":"mno24kftrg87y2kubh","type":"fund","firm":"PAI Partners","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look for Wharton alumni","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532364409},{"id":"mno25orduzgnx39nn2","type":"fund","firm":"Bain Capital","geo":"London","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"Look for Wharton alumni","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532416665},{"id":"mno275whqd11qugsbza","type":"fund","firm":"EQT","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Carlos Santana","action":"Follow-up","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532485537},{"id":"mno27q7cq0wvn4l02yf","type":"fund","firm":"Carlyle","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Isabel Jurado","action":"Escribir para proceso","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532511848},{"id":"mno28rg68bcztywqwaw","type":"fund","firm":"PAI Partners","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"Raul Cánovas","action":"Escribir","nextDate":"2026-09-03","headhunter":"","notes":"","created":1775532560118},{"id":"mno2bdtttohi7u7jd9j","type":"fund","firm":"ALEJANDRO MEJÍAS","geo":"Madrid","strategy":"Buyout","aum":"","status":"Target","priority":"1","contact":"","action":"ESCRIBIR MEJÍAS SENTADAS PE ESPAÑA","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775532682433},{"id":"mnoo77b9zalsyrg8ztq","type":"fund","firm":"Emerging Globe (Headhunter)","geo":"Multi","strategy":"","aum":"","status":"Target","priority":"1","contact":"resumes@emergingglobe.com","action":"Escribir para call introductoria","nextDate":"2026-04-08","headhunter":"","notes":"https://www.emergingglobe.com/meet-the-relationship-recruiters","created":1775569438917},{"id":"mnsc3hvd33djterls3m","type":"headhunter","firm":"Amity Search Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-08","headhunter":"","notes":"","created":1775790975289},{"id":"mnsc3hvdv4aoohyd2c","type":"headhunter","firm":"CPI","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-08","headhunter":"","notes":"","created":1775790975289},{"id":"mnsc3hvdomj3mvx4px","type":"headhunter","firm":"Henkel Search Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-08","headhunter":"","notes":"","created":1775790975290},{"id":"mnsc3hverh2mqpaz9ae","type":"headhunter","firm":"Opus Advisors","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-08","headhunter":"","notes":"","created":1775790975290},{"id":"mnsc3hvewl0v9gcz9k","type":"headhunter","firm":"Gold Coast Search Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775790975290},{"id":"mnsc3hvf5cz4r9dlno","type":"headhunter","firm":"Ratio Advisors","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775790975290},{"id":"mnsc3hvfmevvswbmxls","type":"headhunter","firm":"Oxbridge Group","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775790975290},{"id":"mnsc3hvg3mwx1iqk2p9","type":"headhunter","firm":"SG Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-09","headhunter":"","notes":"","created":1775790975291},{"id":"mnsc3hvgk4xyvjr3qe","type":"headhunter","firm":"Bellcast Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-10","headhunter":"","notes":"","created":1775790975291},{"id":"mnsc3hvh1hz0mksdra","type":"headhunter","firm":"Carter Pierce Recruiting","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-10","headhunter":"","notes":"","created":1775790975291},{"id":"mnsc3hvhihk3nltemh","type":"headhunter","firm":"Dynamics Search Partners","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-10","headhunter":"","notes":"","created":1775790975291},{"id":"mnsc3hvhzjl6ouvefw","type":"headhunter","firm":"Glocap","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-10","headhunter":"","notes":"","created":1775790975292},{"id":"mnsc3hvigmpxpxf0ge","type":"headhunter","firm":"SearchOne","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-11","headhunter":"","notes":"","created":1775790975292},{"id":"mnsc3hvixnqysq2nh7","type":"headhunter","firm":"GoBuyside","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-11","headhunter":"","notes":"","created":1775790975292},{"id":"mnsc3hvjf0rwtr3oiw","type":"headhunter","firm":"Pinnacle Group","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-11","headhunter":"","notes":"","created":1775790975292},{"id":"mnsc3hvjw1sxus4pjx","type":"headhunter","firm":"Robin Judson","geo":"US","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-11","headhunter":"","notes":"","created":1775790975292},{"id":"mnsc3hvkd2txvt5qky","type":"headhunter","firm":"Blackwood Group","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-12","headhunter":"","notes":"","created":1775790975293},{"id":"mnsc3hvku3uywu6rz","type":"headhunter","firm":"Carpenter Farraday","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-12","headhunter":"","notes":"","created":1775790975293},{"id":"mnsc3hvlb4vzxv7s0","type":"headhunter","firm":"KEA Consultants","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-12","headhunter":"","notes":"","created":1775790975293},{"id":"mnsc3hvls5w0yw8t1","type":"headhunter","firm":"Walker Hamill","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-12","headhunter":"","notes":"","created":1775790975293},{"id":"mnsc3hvm96x1zx9u2","type":"headhunter","firm":"Cornell Partnership","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-13","headhunter":"","notes":"","created":1775790975294},{"id":"mnsc3hvmq7y2ay0v3","type":"headhunter","firm":"Stevenson James","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-13","headhunter":"","notes":"","created":1775790975294},{"id":"mnsc3hvn77z3bz1w4","type":"headhunter","firm":"Greenwich Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-13","headhunter":"","notes":"","created":1775790975294},{"id":"mnsc3hvno8a4ca2x5","type":"headhunter","firm":"One Search","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-13","headhunter":"","notes":"","created":1775790975294},{"id":"mnsc3hvo59b5db3y6","type":"headhunter","firm":"Selby Jennings","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-14","headhunter":"","notes":"","created":1775790975295},{"id":"mnsc3hvom0c6ec4z7","type":"headhunter","firm":"Morgan McKinley","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-14","headhunter":"","notes":"","created":1775790975295},{"id":"mnsc3hvp31d7fd5a8","type":"headhunter","firm":"Circle Square","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-14","headhunter":"","notes":"","created":1775790975295},{"id":"newuk001","type":"headhunter","firm":"Pearse Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-15","headhunter":"","notes":"","created":1775790975296},{"id":"newuk002","type":"headhunter","firm":"Nordbridge","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-15","headhunter":"","notes":"","created":1775790975296},{"id":"newuk003","type":"headhunter","firm":"Fulton Garrick","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-15","headhunter":"","notes":"","created":1775790975296},{"id":"newuk004","type":"headhunter","firm":"Angove Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-16","headhunter":"","notes":"","created":1775790975296},{"id":"newuk005","type":"headhunter","firm":"Hinton Rose","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-16","headhunter":"","notes":"","created":1775790975296},{"id":"newuk006","type":"headhunter","firm":"Goodman Masson","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-16","headhunter":"","notes":"","created":1775790975297},{"id":"newuk007","type":"headhunter","firm":"Edgworth Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-17","headhunter":"","notes":"","created":1775790975297},{"id":"newuk008","type":"headhunter","firm":"Arkesden Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-17","headhunter":"","notes":"","created":1775790975297},{"id":"newuk009","type":"headhunter","firm":"Dartmouth Partners","geo":"London","strategy":"","aum":"","status":"Target","priority":"2","contact":"","action":"Reach out — intro email","nextDate":"2026-04-17","headhunter":"","notes":"","created":1775790975297}];
 
-const US_HH=['Amity Search Partners','CPI','Henkel Search Partners','Opus Advisors','Gold Coast Search Partners','Ratio Advisors','Oxbridge Group','SG Partners','Bellcast Partners','Carter Pierce Recruiting','Dynamics Search Partners','Glocap','SearchOne','GoBuyside','Pinnacle Group','Robin Judson'];
-const UK_HH=['Blackwood Group','Carpenter Farraday','KEA Consultants','Walker Hamill','Cornell Partnership','Stevenson James','Greenwich Partners','One Search','Selby Jennings','Morgan McKinley','Circle Square'];
-
-function buildSeedHH(){
-  let i=0;
-  return[
-    ...US_HH.map(function(name){var e={id:uid(),type:'headhunter',firm:name,geo:'US',strategy:'',aum:'',status:'Target',priority:'2',contact:'',action:'Reach out — intro email',nextDate:hhDate(i++),headhunter:'',notes:'',created:Date.now()};return e;}),
-    ...UK_HH.map(function(name){var e={id:uid(),type:'headhunter',firm:name,geo:'London',strategy:'',aum:'',status:'Target',priority:'2',contact:'',action:'Reach out — intro email',nextDate:hhDate(i++),headhunter:'',notes:'',created:Date.now()};return e;}),
-  ];
-}
-
+// ── BULLETPROOF LOAD — never overwrites existing data ─────────────────────
 function load(){
   try{
-    const raw=localStorage.getItem(STORAGE_KEY);
+    var raw=localStorage.getItem(STORAGE_KEY);
     if(raw){
-      const parsed=JSON.parse(raw);
-      const storedFunds=parsed.filter(function(f){return f.type!=='headhunter';}).length;
-      if(storedFunds>=SEED_FUNDS.length){firms=parsed;return;}
+      // Data exists — always use it, no questions asked
+      firms=JSON.parse(raw);
+      // Silently add any new HH from seed that aren't already in stored data
+      var storedIds=firms.map(function(f){return f.id;});
+      SEED_DATA.forEach(function(s){
+        if(storedIds.indexOf(s.id)<0){firms.push(s);}
+      });
+      save();
+      return;
     }
-    firms=SEED_FUNDS.concat(buildSeedHH());
+    // No data at all — first ever load
+    firms=SEED_DATA.slice();
     save();
-  }catch(e){firms=SEED_FUNDS.concat(buildSeedHH());}
+  }catch(e){
+    firms=SEED_DATA.slice();
+    save();
+  }
 }
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(firms));}
 
+// ── FILTERS ───────────────────────────────────────────────────────────────
 function setTypeFilter(type,btn){
   activeTypeFilter=type;
   ['fb-all','fb-fund','fb-hh'].forEach(function(id){document.getElementById(id).className='filter-btn';});
@@ -456,7 +361,7 @@ function setGeoFilter(g,btn){
   renderTracker();
 }
 function getFiltered(){
-  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  var q=(document.getElementById('search-input').value||'').toLowerCase();
   return firms.filter(function(f){
     return(activeTypeFilter==='all'||f.type===activeTypeFilter)&&
       (!activeStatusFilter||f.status===activeStatusFilter)&&
@@ -465,24 +370,25 @@ function getFiltered(){
   });
 }
 
-const GEO_ORDER=['US','London','Abu Dhabi','Madrid','Multi'];
-const GEO_LABELS={US:'United States',London:'London & UK','Abu Dhabi':'Abu Dhabi / MENA',Madrid:'Madrid & Spain',Multi:'Multi-Geography'};
+// ── RENDER ────────────────────────────────────────────────────────────────
+var GEO_ORDER=['US','London','Abu Dhabi','Madrid','Multi'];
+var GEO_LABELS={US:'United States',London:'London & UK','Abu Dhabi':'Abu Dhabi / MENA',Madrid:'Madrid & Spain',Multi:'Multi-Geography'};
 
 function renderTracker(){
-  const data=getFiltered();
-  const container=document.getElementById('tracker-body');
+  var data=getFiltered();
+  var container=document.getElementById('tracker-body');
   if(!data.length){container.innerHTML='<div class="table-wrapper"><div class="empty">No entries match current filters.</div></div>';updateStats();return;}
-  const byGeo={};
+  var byGeo={};
   GEO_ORDER.forEach(function(g){byGeo[g]={fund:[],headhunter:[]};});
   data.forEach(function(f){
-    const g=f.geo||'Multi';
+    var g=f.geo||'Multi';
     if(!byGeo[g])byGeo[g]={fund:[],headhunter:[]};
     byGeo[g][f.type==='headhunter'?'headhunter':'fund'].push(f);
   });
-  let html='';
+  var html='';
   GEO_ORDER.forEach(function(geo){
-    const funds=(byGeo[geo]?byGeo[geo].fund:[]).sort(function(a,b){return(parseInt(a.priority)||9)-(parseInt(b.priority)||9);});
-    const hhs=(byGeo[geo]?byGeo[geo].headhunter:[]).sort(function(a,b){return(a.nextDate||'').localeCompare(b.nextDate||'');});
+    var funds=(byGeo[geo]?byGeo[geo].fund:[]).sort(function(a,b){return(parseInt(a.priority)||9)-(parseInt(b.priority)||9);});
+    var hhs=(byGeo[geo]?byGeo[geo].headhunter:[]).sort(function(a,b){return(a.nextDate||'').localeCompare(b.nextDate||'');});
     if(!funds.length&&!hhs.length)return;
     html+='<div class="geo-section"><div class="geo-section-header"><div class="geo-section-title">'+(GEO_LABELS[geo]||geo)+'</div><div class="geo-section-meta">'+funds.length+' fund'+(funds.length!==1?'s':'')+' · '+hhs.length+' HH</div></div>';
     if(funds.length)html+='<div class="subsection-label">Funds &amp; Firms</div><div class="table-wrapper">'+buildFundTable(funds)+'</div>';
@@ -494,83 +400,84 @@ function renderTracker(){
 }
 
 function buildFundTable(data){
-  let rows='';
+  var rows='';
   data.forEach(function(f){
-    const dc=dateCls(f.nextDate),p=parseInt(f.priority)||2;
+    var dc=dateCls(f.nextDate),p=parseInt(f.priority)||2;
     rows+='<tr onclick="openModal(\''+f.id+'\')"><td><span class="priority p'+p+'">P'+p+'</span></td><td><div class="firm-name">'+f.firm+'</div>'+(f.aum?'<div class="firm-sub">'+f.aum+'</div>':'')+'</td><td style="font-size:12px;color:var(--text-muted)">'+(f.strategy||'—')+'</td><td>'+statusBadge(f.status)+'</td><td class="contact-cell">'+(f.contact?f.contact.split('—')[0].trim():'—')+'</td><td><div class="next-action '+dc+'">'+(f.action||'—')+'</div></td><td><span class="date-cell '+dc+'">'+fmtDate(f.nextDate)+'</span></td><td style="font-size:11px;color:var(--text-dim)">'+(f.headhunter||'—')+'</td><td><div class="notes-preview">'+(f.notes||'')+'</div></td><td class="actions-cell"><button class="icon-btn" onclick="event.stopPropagation();openModal(\''+f.id+'\')">✎</button></td></tr>';
   });
   return'<table><thead><tr><th>P</th><th>Firm</th><th>Strategy</th><th>Status</th><th>Contact</th><th>Next Action</th><th>Date</th><th>HH</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function buildHHTable(data){
-  let rows='';
+  var rows='';
   data.forEach(function(f){
-    const dc=dateCls(f.nextDate);
+    var dc=dateCls(f.nextDate);
     rows+='<tr class="hh-row" onclick="openModal(\''+f.id+'\')"><td><div class="firm-name hh-name">'+f.firm+'</div></td><td>'+statusBadge(f.status)+'</td><td class="contact-cell">'+(f.contact||'—')+'</td><td><div class="next-action '+dc+'">'+(f.action||'—')+'</div></td><td><span class="date-cell '+dc+'">'+fmtDate(f.nextDate)+'</span></td><td><div class="notes-preview">'+(f.notes||'')+'</div></td><td class="actions-cell"><button class="icon-btn" onclick="event.stopPropagation();openModal(\''+f.id+'\')">✎</button></td></tr>';
   });
   return'<table><thead><tr><th>Headhunter</th><th>Status</th><th>Contact</th><th>Next Action</th><th>Date</th><th>Notes</th><th></th></tr></thead><tbody>'+rows+'</tbody></table>';
 }
 
 function updateStats(){
-  const funds=firms.filter(function(f){return f.type!=='headhunter';});
-  const hhs=firms.filter(function(f){return f.type==='headhunter';});
+  var funds=firms.filter(function(f){return f.type!=='headhunter';});
+  var hhs=firms.filter(function(f){return f.type==='headhunter';});
   document.getElementById('s-total').textContent=funds.length;
   document.getElementById('s-hh').textContent=hhs.length;
   document.getElementById('s-process').textContent=funds.filter(function(f){return f.status==='In Process';}).length;
   document.getElementById('s-network').textContent=funds.filter(function(f){return f.status==='Networking';}).length;
   document.getElementById('s-overdue').textContent=firms.filter(function(f){return f.nextDate&&dateCls(f.nextDate)==='overdue';}).length;
-  const geos=['London','Abu Dhabi','Madrid','US'];
+  var geos=['London','Abu Dhabi','Madrid','US'];
   document.getElementById('s-geo-breakdown').textContent=geos.map(function(g){return g+': '+funds.filter(function(f){return f.geo===g;}).length;}).join(' · ');
   document.getElementById('s-hh-sub').textContent=['US','London'].map(function(g){return g+': '+hhs.filter(function(h){return h.geo===g;}).length;}).join(' · ');
   document.getElementById('h-funds').textContent=funds.length;
   document.getElementById('h-hh').textContent=hhs.length;
   document.getElementById('h-active').textContent=firms.filter(function(f){return['Rejected','Offer'].indexOf(f.status)<0;}).length;
-  const next=firms.filter(function(f){return f.nextDate&&dateCls(f.nextDate)!=='';}).sort(function(a,b){return a.nextDate.localeCompare(b.nextDate);})[0];
+  var next=firms.filter(function(f){return f.nextDate&&dateCls(f.nextDate)!=='';}).sort(function(a,b){return a.nextDate.localeCompare(b.nextDate);})[0];
   document.getElementById('h-next').textContent=next?next.firm.split(' ')[0]+' '+fmtDate(next.nextDate):'—';
 }
 
 function renderPipeline(){
-  const stages=['Target','Outreach Sent','Networking','In Process','Rejected','Offer'];
-  const fundData=firms.filter(function(f){return f.type!=='headhunter';});
+  var stages=['Target','Outreach Sent','Networking','In Process','Rejected','Offer'];
+  var fundData=firms.filter(function(f){return f.type!=='headhunter';});
   document.getElementById('pipeline-board').innerHTML=stages.map(function(stage){
-    const cards=fundData.filter(function(f){return f.status===stage;});
+    var cards=fundData.filter(function(f){return f.status===stage;});
     return'<div class="pipeline-col"><div class="pipeline-header"><span>'+stage+'</span><span class="pipeline-count">'+cards.length+'</span></div>'+(cards.length?cards.map(function(f){return'<div class="pipeline-card" onclick="openModal(\''+f.id+'\')"><div class="pc-firm">'+f.firm+'</div><div class="pc-geo">'+geoBadge(f.geo)+'</div>'+(f.action?'<div class="pc-action">'+f.action+'</div>':'')+(f.nextDate?'<div class="pc-date">'+fmtDate(f.nextDate)+'</div>':'')+'</div>';}).join(''):'<div style="font-size:11px;color:var(--text-dim);font-family:\'DM Mono\',monospace;padding:8px 0">empty</div>')+'</div>';
   }).join('');
 }
 
 function renderCalendar(){
-  const now=new Date();now.setHours(0,0,0,0);
-  const weekMap={};
+  var now=new Date();now.setHours(0,0,0,0);
+  var weekMap={};
   firms.filter(function(f){return f.nextDate;}).sort(function(a,b){return a.nextDate.localeCompare(b.nextDate);}).forEach(function(f){
-    const d=new Date(f.nextDate+'T00:00:00');
-    const wk=Math.max(0,Math.floor((d-now)/(7*86400000)));
+    var d=new Date(f.nextDate+'T00:00:00');
+    var wk=Math.max(0,Math.floor((d-now)/(7*86400000)));
     if(wk<8){if(!weekMap[wk])weekMap[wk]=[];weekMap[wk].push(f);}
   });
-  const html=[];
-  for(let w=0;w<8;w++){
-    const wStart=new Date(now);wStart.setDate(now.getDate()+w*7);
-    const label='Week of '+wStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-    const items=weekMap[w]||[];
+  var html=[];
+  for(var w=0;w<8;w++){
+    var wStart=new Date(now);wStart.setDate(now.getDate()+w*7);
+    var label='Week of '+wStart.toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+    var items=weekMap[w]||[];
     html.push('<div class="week-block"><div class="week-label">'+label+'</div>'+(items.length?items.map(function(f){return'<div class="cal-item" onclick="openModal(\''+f.id+'\')"><div class="cal-dot '+(f.type==='headhunter'?'hh':'fund')+'"></div><div class="cal-date">'+fmtDate(f.nextDate)+'</div><div><div class="cal-firm '+(f.type==='headhunter'?'hh':'')+'">'+f.firm+'</div><div class="cal-text">'+(f.action||'')+'</div></div></div>';}).join(''):'<div class="cal-item"><div class="cal-text" style="color:var(--text-dim)">No actions</div></div>')+'</div>');
   }
   document.getElementById('cal-grid').innerHTML=html.join('');
 }
 
+// ── MODAL ─────────────────────────────────────────────────────────────────
 function setModalType(type){
   modalType=type;
   document.getElementById('tbtn-fund').className='type-btn'+(type==='fund'?' active-fund':'');
   document.getElementById('tbtn-hh').className='type-btn'+(type==='headhunter'?' active-hh':'');
   document.querySelectorAll('.fund-only').forEach(function(el){el.style.display=type==='fund'?'':'none';});
-  const sel=document.getElementById('f-status'),cur=sel.value;
-  const opts=type==='headhunter'?['Target','Outreach Sent','Networking','Registered','Rejected']:['Target','Outreach Sent','Networking','In Process','Rejected','Offer'];
+  var sel=document.getElementById('f-status'),cur=sel.value;
+  var opts=type==='headhunter'?['Target','Outreach Sent','Networking','Registered','Rejected']:['Target','Outreach Sent','Networking','In Process','Rejected','Offer'];
   sel.innerHTML=opts.map(function(s){return'<option value="'+s+'"'+(s===cur?' selected':'')+'>'+s+'</option>';}).join('');
 }
 
 function openModal(id){
   editingId=id||null;
-  const del=document.getElementById('btn-delete');
+  var del=document.getElementById('btn-delete');
   if(id){
-    const f=firms.filter(function(x){return x.id===id;})[0];if(!f)return;
+    var f=firms.filter(function(x){return x.id===id;})[0];if(!f)return;
     document.getElementById('modal-title').textContent='Edit Entry';del.style.display='block';
     setModalType(f.type||'fund');
     document.getElementById('f-firm').value=f.firm;
@@ -601,11 +508,11 @@ function closeModal(){document.getElementById('modal-overlay').classList.remove(
 function closeModalOutside(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
 
 function saveFirm(){
-  const firm=document.getElementById('f-firm').value.trim();
-  const geo=document.getElementById('f-geo').value;
-  const status=document.getElementById('f-status').value;
+  var firm=document.getElementById('f-firm').value.trim();
+  var geo=document.getElementById('f-geo').value;
+  var status=document.getElementById('f-status').value;
   if(!firm||!geo||!status){alert('Name, geography and status are required.');return;}
-  const data={type:modalType,firm:firm,geo:geo,status:status,
+  var data={type:modalType,firm:firm,geo:geo,status:status,
     strategy:modalType==='fund'?document.getElementById('f-strategy').value:'',
     aum:modalType==='fund'?document.getElementById('f-aum').value.trim():'',
     priority:modalType==='fund'?document.getElementById('f-priority').value:'2',
@@ -615,7 +522,8 @@ function saveFirm(){
     nextDate:document.getElementById('f-date').value,
     notes:document.getElementById('f-notes').value.trim()};
   if(editingId){
-    const idx=firms.reduce(function(acc,f,i){return f.id===editingId?i:acc;},-1);
+    var idx=-1;
+    firms.forEach(function(f,i){if(f.id===editingId)idx=i;});
     if(idx>=0)firms[idx]=Object.assign({},firms[idx],data);
   }else{
     firms.push(Object.assign({id:uid(),created:Date.now()},data));
