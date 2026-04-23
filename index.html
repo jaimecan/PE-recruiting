@@ -5,7 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PE Recruiting — Jaime</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+// GH SYNC
+var _ghToken=null;
+function pushToGitHub(){
+  var btn=document.getElementById("github-sync-btn");
+  if(!_ghToken){var t=prompt("GitHub PAT (memory only):"); if(!t)return; _ghToken=t.trim();}
+  btn.textContent="Syncing..."; btn.disabled=true;
+  fetch("https://api.github.com/repos/jaimecan/PE-recruiting/contents/index.html",
+    {headers:{"Authorization":"token "+_ghToken,"Accept":"application/vnd.github.v3+json"}})
+  .then(function(r){return r.json();})
+  .then(function(meta){
+    var sha=meta.sha;
+    var c=decodeURIComponent(escape(atob(meta.content.replace(/\n/g,""))));
+    var d=localStorage.getItem(STORAGE_KEY)||"[]";
+    var i0=c.indexOf("var SEED_DATA=["); if(i0===-1)throw new Error("marker missing");
+    var b0=c.indexOf("[",i0+14); var dp=0,b1=-1;
+    for(var i=b0;i<c.length;i++){if(c[i]==="[")dp++;if(c[i]==="]"){dp--;if(dp===0){b1=i;break;}}}
+    var u=c.slice(0,b0)+d+c.slice(b1+1);
+    var enc=btoa(unescape(encodeURIComponent(u)));
+    return fetch("https://api.github.com/repos/jaimecan/PE-recruiting/contents/index.html",
+      {method:"PUT",headers:{"Authorization":"token "+_ghToken,"Accept":"application/vnd.github.v3+json","Content-Type":"application/json"},
+       body:JSON.stringify({message:"Sync SEED_DATA "+(new Date().toISOString().slice(0,10)),content:enc,sha:sha})});
+  })
+  .then(function(r){return r.json();})
+  .then(function(res){
+    if(res.content){btn.textContent="✓ Synced!";btn.style.background="#2d6a4f";
+      setTimeout(function(){btn.textContent="☁ Sync";btn.style.background="";btn.disabled=false;},3000);
+    }else{throw new Error(res.message||"unknown error");}
+  })
+  .catch(function(e){_ghToken=null;btn.textContent="☁ Sync";btn.disabled=false;alert("Sync failed: "+e.message);});
+}
+</script>
 <style>
 :root{--bg:#f8f7f4;--surface:#fff;--surface2:#f2f0ec;--border:#e2ddd8;--accent:#9a6f2e;--text:#1a1917;--text-muted:#6b6760;--text-dim:#a09d99;--green:#2d7a57;--yellow:#b8860b;--red:#b55a44;--blue:#3a8a78;--purple:#6b5fa0;--hh:#4a7fa5;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -145,6 +176,7 @@ textarea{resize:vertical;min-height:65px;}
     <div class="stat-pill"><strong id="h-active">0</strong>active</div>
     <div class="stat-pill"><strong id="h-next">—</strong>next action</div>
     <button class="btn-export" onclick="exportBackup()">💾 Backup</button>
+    <button class="btn-export" id="github-sync-btn" onclick="pushToGitHub()" title="Sync to GitHub">&#9729; Sync</button>
     <button class="btn-briefing" id="briefing-btn" onclick="sendBriefing()">📧 Today's Briefing</button>
     <button class="btn-add" onclick="openModal()">+ Add Entry</button>
   </div>
